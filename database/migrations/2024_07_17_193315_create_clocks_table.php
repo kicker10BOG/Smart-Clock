@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 255)->nullable()->default(null);
             $table->enum('month_format', ['short', 'long'])->default('short');
             $table->enum('weekday_format', ['short', 'long', 'hide'])->default('short');
+            $table->boolean('show_date')->default(true);
             $table->boolean('show_next_alarm')->default(true);
             $table->boolean('show_seconds')->default(false);
             $table->boolean('use_12hr')->default(true);

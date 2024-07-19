@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, useAttrs } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const model = defineModel()
 
@@ -19,13 +19,10 @@ const props = defineProps({
   },
 })
 
-const attrs = useAttrs()
 const div = ref(null)
 const input = ref(null)
-// const required = ref(false)
 
 onMounted(() => {
-  console.log(attrs);
   if (div.value.hasAttribute('autofocus')) {
     div.value.removeAttribute('autofocus')
     input.value.setAttribute('autofocus', '')

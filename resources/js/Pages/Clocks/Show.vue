@@ -70,7 +70,7 @@ setInterval(() => {
 
 <template>
   <div class="flex flex-col w-full justify-around">
-    <div v-if="clock.date_format != 'off'"
+    <div v-if="clock.show_date"
       :style="`font-size: ${clock.date_size}px; font-family: ${clock.date_font}; margin: ${clock.date_margin}px auto; order: ${clock.date_order};`">
       <span v-if="clock.weekday_format !== 'hide'">{{ currWeekday }},</span> {{ currMonth }} {{ currMonthDay }}
     </div>

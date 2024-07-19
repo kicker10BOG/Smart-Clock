@@ -38,7 +38,7 @@
       </div>
       <div
         :class="
-          'flex flex-grow' +
+          'flex flex-grow pr-4' +
           (isCollapsible && shouldShowToggle ? '' : ' justify-center') +
           (isCollapsible && isTitleClickable ? ' cursor-pointer' : '')
         "

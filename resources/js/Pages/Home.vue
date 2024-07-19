@@ -7,9 +7,7 @@ const user = computed(() => page.props.auth.user )
 </script>
 
 <template>
-  <Layout>
     <Head title="Welcome" />
     <h1>Welcome</h1>
     <p>Hello {{ user ? user.name : 'guest' }}, welcome to your first Inertia app!</p>
-  </Layout>
 </template>

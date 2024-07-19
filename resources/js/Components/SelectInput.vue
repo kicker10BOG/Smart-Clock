@@ -1,9 +1,6 @@
 <script setup>
-import { onMounted, ref, useAttrs } from 'vue';
+import { onMounted, ref } from 'vue';
 
-// defineProps({
-//   modelValue: String,
-// });
 
 const model = defineModel()
 

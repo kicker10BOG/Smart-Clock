@@ -1,20 +1,11 @@
 <script setup>
-import { onMounted, ref, useAttrs } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const model = defineModel()
 
 const props = defineProps({
   id: {
     required: true,
-  },
-  step: {
-    default: 1,
-  },
-  min: {
-    default: 0,
-  },
-  max: {
-    default: 100000,
   },
   type: {
     default: "text",
@@ -50,15 +41,15 @@ onMounted(() => {
   }
   if (div.value.hasAttribute('step')) {
     input.value.setAttribute('step', div.value.getAttribute('step'))
-    // div.value.removeAttribute('step')
+    div.value.removeAttribute('step')
   }
   if (div.value.hasAttribute('min')) {
     input.value.setAttribute('min', div.value.getAttribute('min'))
-    // div.value.removeAttribute('min')
+    div.value.removeAttribute('min')
   }
   if (div.value.hasAttribute('max')) {
     input.value.setAttribute('max', div.value.getAttribute('max'))
-    // div.value.removeAttribute('max')
+    div.value.removeAttribute('max')
   }
 })
 

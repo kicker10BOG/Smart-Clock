@@ -57,6 +57,7 @@ class ClockController extends Controller
             'alarm_font' => [Rule::in(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])],
         ]);
 
+        $validateAttributes['show_date'] = $request->input('show_date');
         $validateAttributes['show_next_alarm'] = $request->input('show_next_alarm');
         $validateAttributes['show_seconds'] = $request->input('show_seconds');
         $validateAttributes['use_12hr'] = $request->input('use_12hr');
@@ -67,7 +68,49 @@ class ClockController extends Controller
 
         $clock = Clock::create($validateAttributes);
 
-        return to_route('dashboard');
+        return to_route('clocks.show', ['clock' => $clock]);
+        // return to_route('dashboard');
         // return Inertia::render('Dashboard');
+    }
+
+    /**
+     * Update a clock
+     */
+    public function update(Request $request, Clock $clock)
+    {
+        if ($request->user()->cannot('update', $clock)) {
+            abort(403);
+        }
+
+        $validateAttributes = $request->validate([
+            'name' => ['required', 'max: 255'],
+            'month_format' => [Rule::in(['short', 'long'])],
+            'weekday_format' => [Rule::in(['short', 'long', 'hidden'])],
+            'date_order' => [Rule::in([1, 2, 3])],
+            'clock_order' => [Rule::in([1, 2, 3])],
+            'alarm_order' => [Rule::in([1, 2, 3])],
+            'date_size' => ['integer', 'numeric', 'min:1'],
+            'clock_size' => ['integer', 'numeric', 'min:1'],
+            'alarm_size' => ['integer', 'numeric', 'min:1'],
+            'date_margin' => ['integer', 'numeric', 'between:-1000, 1000'],
+            'clock_margin' => ['integer', 'numeric', 'between:-1000, 1000'],
+            'alarm_margin' => ['integer', 'numeric', 'between:-1000, 1000'],
+            'date_font' => [Rule::in(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])],
+            'clock_font' => [Rule::in(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])],
+            'alarm_font' => [Rule::in(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])],
+        ]);
+
+        $validateAttributes['show_date'] = $request->input('show_date');
+        $validateAttributes['show_next_alarm'] = $request->input('show_next_alarm');
+        $validateAttributes['show_seconds'] = $request->input('show_seconds');
+        $validateAttributes['use_12hr'] = $request->input('use_12hr');
+        $validateAttributes['show_ampm'] = $request->input('show_ampm');
+        $validateAttributes['shorten_ampm'] = $request->input('shorten_ampm');
+
+        $validateAttributes['user_id'] = $request->user()->id;
+
+        $clock->update($validateAttributes);
+
+        return to_route('clocks.show', ['clock' => $clock]);
     }
 }
