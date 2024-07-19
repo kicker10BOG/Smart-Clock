@@ -69,7 +69,7 @@ setInterval(() => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full justify-around">
+  <div class="flex flex-grow flex-col w-full justify-around">
     <div v-if="clock.show_date"
       :style="`font-size: ${clock.date_size}px; font-family: ${clock.date_font}; margin: ${clock.date_margin}px auto; order: ${clock.date_order};`">
       <span v-if="clock.weekday_format !== 'hide'">{{ currWeekday }},</span> {{ currMonth }} {{ currMonthDay }}
@@ -84,8 +84,8 @@ setInterval(() => {
       :style="`font-size: ${clock.alarm_size}px; font-family: ${clock.alarm_font}; margin: ${clock.alarm_margin}px auto; order: ${clock.alarm_order};`">
       next alarm
     </div>
-  </div>
-  <div v-if="user && clockProxy.user_id == user.id" class="relative">
-    <Manage v-model="clockProxy" />
+    <div v-if="user && clockProxy.user_id == user.id" class="relative">
+      <Manage v-model="clockProxy" />
+    </div>
   </div>
 </template>
