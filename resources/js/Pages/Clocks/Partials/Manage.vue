@@ -6,6 +6,8 @@ import BasicPanel from '@/Components/BasicPanel.vue'
 import Icon from '@/Components/Icon.vue'
 import ClockForm from './ClockForm.vue'
 import showNav from '@/Stores/showNav.js'
+import NavLink from '@/Components/Nav/NavLink.vue'
+import LinkButton from '@/Components/LinkButton.vue'
 
 const model = defineModel()
 </script>
@@ -30,6 +32,14 @@ const model = defineModel()
           <BasicPanel :collapsible="true" :startCollapsed="true">
             <template #header>Alarms</template>
             Alarms here
+          </BasicPanel>
+          <BasicPanel :collapsible="true" :startCollapsed="true">
+            <template #header>delete</template>
+            <div class="flex flex-row justify-center w-full">
+              <LinkButton :href="route('clocks.destroy', { 'clock': model.id })" type="danger" method="delete" class="my-2"
+                as="button">Delete
+              </LinkButton>
+            </div>
           </BasicPanel>
         </div>
       </VDropdown>

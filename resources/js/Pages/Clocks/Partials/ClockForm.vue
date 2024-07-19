@@ -144,7 +144,7 @@ const submit = () => {
   // console.log(useModel.value)
   console.log(props.type)
   if (props.type == "update") {
-    form.post(route('clocks.update', { 'clock': model.value.id }));
+    form.put(route('clocks.update', { 'clock': model.value.id }));
     router.visit(route('clocks.show', { 'clock': model.value.id }), {
       only: ['clock'],
     })

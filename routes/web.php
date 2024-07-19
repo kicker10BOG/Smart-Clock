@@ -36,6 +36,7 @@ Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->gro
     ])->group(function () {
         Route::get('/new', 'create')->name('create');
         Route::post('/new', 'store')->name('store');
-        Route::post('/update/{clock}', 'update')->name('update');
+        Route::put('/{clock}', 'update')->whereNumber('clock')->name('update');
+        Route::delete('/{clock}', 'destroy')->whereNumber('clock')->name('destroy');
     });
 });

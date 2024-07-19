@@ -113,4 +113,18 @@ class ClockController extends Controller
 
         return to_route('clocks.show', ['clock' => $clock]);
     }
+
+    /**
+     * Destroy a clock
+     */
+    public function destroy(Request $request, Clock $clock) 
+    {
+        if ($request->user()->cannot('delete', $clock)) {
+            abort(403);
+        }
+
+        $clock->delete();
+
+        return to_route('dashboard');
+    }
 }
