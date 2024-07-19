@@ -36,6 +36,7 @@ return new class extends Migration
             $table->enum('date_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('sans-serif');
             $table->enum('clock_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('math');
             $table->enum('alarm_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('sans-serif');
+            $table->unsignedBigInteger('other_clock_alarms')->nullable()->default(null);
         });
     }
 
