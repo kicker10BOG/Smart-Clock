@@ -23,12 +23,6 @@ createInertiaApp({
     });
     return page;
   },
-  // resolve: (name) => {
-  //   const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
-  //   let page = pages[`./Pages/${name}.vue`]
-  //   page.default.layout = page.default.layout || Layout
-  //   return pages[`./Pages/${name}.vue`]
-  // },
   setup({ el, App, props, plugin }) {
     return createApp({ render: () => h(App, props) })
       .use(plugin)

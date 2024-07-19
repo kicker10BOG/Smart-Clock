@@ -11,9 +11,28 @@ import darkMode from '@/Stores/darkMode.js'
       <NavBar sitename="Smart Clock" />
       <Banner />
       <div class="container flex flex-grow mx-auto">
-        <slot />
+        <transition name="fade">
+          <slot />
+        </transition>
       </div>
       <Footer />
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+  width: 100%;
+}
+.fade-enter-active{
+  transition-delay: 0.31s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  width: 100%;
+}
+</style>

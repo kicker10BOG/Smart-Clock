@@ -6,10 +6,6 @@ const props = defineProps({
     type: String,
     default: null,
   },
-  // current: {
-  //   type: Boolean,
-  //   default: false,
-  // },
   as: {
     type: String,
     default: "a",

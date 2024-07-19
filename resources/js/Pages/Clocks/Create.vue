@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { Link, useForm, usePage } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
 import TextInput from '@/Components/TextInput.vue'
 import SelectInput from '@/Components/SelectInput.vue'
 import Checkbox from '@/Components/Checkbox.vue'
@@ -50,6 +49,10 @@ const form = useForm({
   alarm_font: 'sans-serif',
 })
 
+const submit = () => {
+  form.post(route('clocks.store'));
+}
+
 const setOrder = () => {
   for (let i = 0; i < orderArr.value.length; i++) {
     if (orderArr.value[i].id == 'date') {
@@ -65,10 +68,6 @@ const setOrder = () => {
       continue
     }
   }
-}
-
-const submit = () => {
-  form.post(route('clocks.store'));
 }
 
 const weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -125,7 +124,7 @@ setInterval(() => {
 <template>
   <div class="flex flex-col w-full">
     <h3>
-      Create a New Clock
+      Create a Ne Clock
     </h3>
     <form @submit.prevent="submit">
       <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-">
@@ -147,8 +146,7 @@ setInterval(() => {
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <!-- <InputLabel for="weekday_format" value="Weekday Format" /> -->
-            <SelectInput id="weekday_format" label="Weekday Format" v-model="form.weekday_format" class="w-fit"
-             >
+            <SelectInput id="weekday_format" label="Weekday Format" v-model="form.weekday_format" class="w-fit">
               <option value="hide">Hide</option>
               <option value="short">Short</option>
               <option value="long">Long</option>
@@ -206,7 +204,7 @@ setInterval(() => {
             <InputError class="mt-2" :message="form.errors.clock_font" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-            <SelectInput id="alarm_font" label="Alarm Font" v-model="form.alarm_font" class="mt-1 block  w-fit" disabled>
+            <SelectInput id="alarm_font" label="Alarm Font" v-model="form.alarm_font" class="mt-1 block  w-fit">
               <template v-for="(opt, i) in fontOptions" :key="i">
                 <option :value="opt">{{ opt }}</option>
               </template>
@@ -222,7 +220,7 @@ setInterval(() => {
         <div class="flex flex-row flex-wrap">
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
             <TextInput id="date_size" label="Date Font Size (px)" v-model="form.date_size" type="number" step="1"
-              min="1" inputWidthClass="w-24" disabled />
+              min="1" inputWidthClass="w-24" />
             <InputError class="mt-2" :message="form.errors.date_size" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
@@ -239,22 +237,22 @@ setInterval(() => {
       </BasicPanel>
       <BasicPanel :collapsible="true">
         <template #header>
-          Vertical Spacing
+          Minimum Vertical Spacing
         </template>
         <div class="flex flex-row flex-wrap">
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-            <TextInput id="date_margin" label="Date Margin (px)" v-model="form.date_margin" type="number" step="1" min="-1000"
-              inputWidthClass="w-24" />
+            <TextInput id="date_margin" label="Date Margin (px)" v-model="form.date_margin" type="number" step="1"
+              min="-1000" inputWidthClass="w-24" />
             <InputError class="mt-2" :message="form.errors.date_margin" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-            <TextInput id="clock_margin" label="Clock Margin (px)" v-model="form.clock_margin" type="number" step="1" min="-1000"
-            inputWidthClass="w-24" />
+            <TextInput id="clock_margin" label="Clock Margin (px)" v-model="form.clock_margin" type="number" step="1"
+              min="-1000" inputWidthClass="w-24" />
             <InputError class="mt-2" :message="form.errors.clock_margin" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-            <TextInput id="alarm_margin" label="Alarm Margin (px)" v-model="form.alarm_margin" type="number" step="1" min="-1000"
-              inputWidthClass="w-24" />
+            <TextInput id="alarm_margin" label="Alarm Margin (px)" v-model="form.alarm_margin" type="number" step="1"
+              min="-1000" inputWidthClass="w-24" />
             <InputError class="mt-2" :message="form.errors.alarm_margin" />
           </div>
         </div>
@@ -274,27 +272,26 @@ setInterval(() => {
           </div>
         </div>
       </BasicPanel>
-
-
-      <div class="flex flex-col w-full justify-around">
-        <div v-if="form.date_format != 'off'"
-          :style="`font-size: ${form.date_size}px; font-family: ${form.date_font}; margin: ${form.date_margin}px auto; order: ${form.date_order};`">
-          <span v-if="form.weekday_format !== 'hide'">{{ currWeekday }},</span> {{ currMonth }} {{ currMonthDay }}
-        </div>
-        <div
-          :style="`font-size: ${form.clock_size}px; font-family: ${form.clock_font}; margin: ${form.clock_margin}px auto; order: ${form.clock_order};`">
-          {{ currHour }}:{{ currMinute }}<span v-if="form.show_seconds">:{{ currSecond }}</span> <span
-            v-if="form.show_ampm">{{
-              currAMPM }}</span>
-        </div>
-        <div v-if="form.show_next_alarm"
-          :style="`font-size: ${form.alarm_size}px; font-family: ${form.alarm_font}; margin: ${form.alarm_margin}px auto; order: ${form.alarm_order};`">
-          next alarm
-        </div>
-      </div>
-      <div class="flex flex-row justify-end">
-        <BasicButton>Submit</BasicButton>
-      </div>
     </form>
+
+    <div class="flex flex-col w-full justify-around">
+      <div v-if="form.date_format != 'off'"
+        :style="`font-size: ${form.date_size}px; font-family: ${form.date_font}; margin: ${form.date_margin}px auto; order: ${form.date_order};`">
+        <span v-if="form.weekday_format !== 'hide'">{{ currWeekday }},</span> {{ currMonth }} {{ currMonthDay }}
+      </div>
+      <div
+        :style="`font-size: ${form.clock_size}px; font-family: ${form.clock_font}; margin: ${form.clock_margin}px auto; order: ${form.clock_order};`">
+        {{ currHour }}:{{ currMinute }}<span v-if="form.show_seconds">:{{ currSecond }}</span> <span
+          v-if="form.show_ampm">{{
+            currAMPM }}</span>
+      </div>
+      <div v-if="form.show_next_alarm"
+        :style="`font-size: ${form.alarm_size}px; font-family: ${form.alarm_font}; margin: ${form.alarm_margin}px auto; order: ${form.alarm_order};`">
+        next alarm
+      </div>
+    </div>
+    <div class="flex flex-row justify-end">
+      <BasicButton>Submit</BasicButton>
+    </div>
   </div>
 </template>

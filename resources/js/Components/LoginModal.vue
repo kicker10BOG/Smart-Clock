@@ -17,9 +17,9 @@ const model = defineModel({
 
 defineProps({
   canResetPassword: {
-  type: Boolean,
-  default: true,
-},
+    type: Boolean,
+    default: true,
+  },
   status: String,
 });
 
@@ -60,24 +60,21 @@ const submit = () => {
 
       <form @submit.prevent="submit">
         <div>
-          <InputLabel for="email" value="Email" />
-          <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus
-            autocomplete="username" />
+          <TextInput id="email" label="Email" v-model="form.email" type="email" position="top" class="mt-1 block w-full"
+            required autofocus autocomplete="username" />
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
 
         <div class="mt-4">
-          <InputLabel for="password" value="Password" />
-          <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required
-            autocomplete="current-password" />
+          <TextInput id="password" label="Password" v-model="form.password" type="password" position="top"
+            class="mt-1 block w-full" required autocomplete="current-password" />
           <InputError class="mt-2" :message="form.errors.password" />
         </div>
 
         <div class="block mt-4">
-          <label class="flex items-center">
-            <Checkbox v-model:checked="form.remember" name="remember" />
-            <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
-          </label>
+          <div class="flex flex-row justify-end">
+            <Checkbox v-model:checked="form.remember" id="remember" label="remember me" position="right" />
+          </div>
         </div>
 
       </form>
