@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import ClockDisplay from './Partials/ClockDisplay.vue';
-import Manage from './Partials/Manage.vue';
+import ClockManage from './Partials/ClockManage.vue';
 
 const props = defineProps({
   clock: {
@@ -20,7 +20,7 @@ const clockProxy = ref(props.clock)
   <div class="flex flex-grow flex-col w-full justify-around">
     <ClockDisplay v-model="clockProxy" />
     <div v-if="user && clockProxy.user_id == user.id" class="relative">
-      <Manage v-model="clockProxy" />
+      <ClockManage v-model="clockProxy" />
     </div>
   </div>
 </template>
