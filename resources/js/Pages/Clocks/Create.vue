@@ -112,7 +112,7 @@ setInterval(() => {
         <h3>
           Create a New Clock
         </h3>
-        <ClockForm v-model="form" />
+        <ClockForm v-model="form" type="new" class="z-10"/>
       </div>
     </div>
     <ClockDisplay v-model="form" />
