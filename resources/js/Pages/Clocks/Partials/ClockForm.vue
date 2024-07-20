@@ -1,8 +1,10 @@
 <script setup>
+import axios from "axios";
 import { ref, computed } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import ClockInnerForm from './ClockInnerForm.vue'
 import BasicButton from '@/Components/BasicButton.vue'
+import { addFlashMsg } from '@/Stores/flashMessages.js'
 
 const model = defineModel()
 
@@ -145,13 +147,36 @@ else {
 
 const submit = () => {
   if (props.type == "update") {
-    form.put(route('clocks.update', { 'clock': model.value.id }));
-    router.visit(route('clocks.show', { 'clock': model.value.id }), {
-      only: ['clock'],
+    form.put(route('clocks.update', { 'clock': model.value.id }))
+    // axios.put(route('clocks.update', { 'clock': model.value.id }), form)
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+    // router.visit(route('clocks.show', { 'clock': model.value.id }), {
+    //   only: ['clock'],
+    // })
+    addFlashMsg({
+      title: '', 
+      message: 'Clock Saved', 
+      closeable: true,
+      delay: 5,
+      type: 'success',
+      important: false, 
     })
   }
   else {
-    form.post(route('clocks.store'));
+    form.post(route('clocks.store'))
+    addFlashMsg({
+      title: '', 
+      message: 'Clock Created', 
+      closeable: true,
+      delay: 0,
+      type: 'success',
+      important: false, 
+    })
   }
 }
 </script>

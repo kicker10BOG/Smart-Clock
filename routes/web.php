@@ -9,6 +9,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\MainController;
 
 Route::get('/', [MainController::class, 'home'])->name('home');
+Route::put('/flash', [MainController::class, 'addFlash'])->name('addFlash');
+Route::delete('/flash', [MainController::class, 'removeFlash'])->name('removeFlash');
 
 Route::middleware([
     'auth:sanctum',

@@ -15,7 +15,9 @@ class ClockController extends Controller
      */
     public function show(Request $request, Clock $clock)
     {
+        // flash("test");
         return Inertia::render('Clocks/Show', ['clock' => $clock]);
+        // return Inertia::render('Clocks/Show', ['clock' => $clock, 'flash' => [flash("test")]]);
     }
 
     /**

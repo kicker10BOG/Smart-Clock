@@ -35,8 +35,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $fMessages = $request->session()->get('fMessages', []);
+        if (is_object($fMessages)) {
+            $fMessages = (array)$fMessages;
+        }
+        // dd($fMessages);
         return array_merge(parent::share($request), [
-            //
+            'flash' => array_values($fMessages),
         ]);
     }
 }

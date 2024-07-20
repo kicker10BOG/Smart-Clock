@@ -20,12 +20,8 @@ const props = defineProps({
   logo: {
     default: null,
   },
-  subHeight: {
-    default: 100,
-  }
 })
 
-// const height = ref(200)
 const isOpen = ref(false)
 const openLoginModal = ref(false)
 
@@ -37,22 +33,6 @@ const toggleFullScreen = () => {
   }
 }
 
-const logout = () => {
-  router.post('/logout')
-  router.reload({ preserveState: false })
-}
-
-// const handleResize = () => {
-//   height.value = window.innerHeight - props.subHeight;
-// }
-// onMounted(() => {
-//   window.addEventListener("resize", handleResize);
-//   handleResize();
-// })
-// onUnmounted(() => {
-//   window.removeEventListener("resize", handleResize);
-// })
-
 const closeMenu = () => {
   isOpen.value = false
 }
@@ -63,10 +43,13 @@ const closeMenu = () => {
     <div v-if="showNav" class="flex flex-row h-8 w-full bg-gray-300 dark:bg-gray-700 z-20">
       <div class="flex flex-shrink flex-col justify-around">
         <Link href="/" class="mx-1 text-xl">
-        <img v-if="props.logo" :src="props.logo" />
+        <!-- <img v-if="props.logo" :src="props.logo" />
         <span v-else>
           {{ props.sitename }}
-        </span>
+        </span> -->
+        <slot name="brand">
+          {{ props.sitename }}
+        </slot>
         </Link>
       </div>
       <div class="flex flex-grow">
