@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('show_ampm')->default(true);
             $table->boolean('shorten_ampm')->default(true);
             $table->unsignedSmallInteger('width')->default(720);
-            $table->unsignedSmallInteger('hright')->default(480);
+            $table->unsignedSmallInteger('height')->default(480);
             $table->smallInteger('date_x')->default(0);
             $table->smallInteger('clock_x')->default(0);
             $table->smallInteger('alarm_x')->default(0);
