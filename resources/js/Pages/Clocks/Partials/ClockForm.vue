@@ -5,7 +5,6 @@ import ClockInnerForm from './ClockInnerForm.vue'
 import BasicButton from '@/Components/BasicButton.vue'
 
 const model = defineModel()
-console.log(model.value);
 
 const props = defineProps({
   type: {
@@ -15,26 +14,25 @@ const props = defineProps({
 })
 
 const useModel = model.value != undefined
-console.log(useModel);
 const orderArr = ref(new Array())
 
 if (useModel) {
   for (let i = 0; i < 3; i++) {
-    if (model.value.date_order == i + 1) {
+    if (model.value.date_x == i + 1) {
       orderArr.value[i] = {
         id: 'date',
         name: 'Date',
       }
       continue
     }
-    if (model.value.clock_order == i + 1) {
+    if (model.value.clock_x == i + 1) {
       orderArr.value[i] = {
         id: 'clock',
         name: 'Clock',
       }
       continue
     }
-    if (model.value.alarm_order == i + 1) {
+    if (model.value.alarm_x == i + 1) {
       orderArr.value[i] = {
         id: 'alarm',
         name: 'Alarm',
@@ -70,15 +68,17 @@ const form = useForm({
   use_12hr: true,
   show_ampm: true,
   shorten_ampm: true,
-  date_order: 1,
-  clock_order: 2,
-  alarm_order: 3,
-  date_size: 108,
-  clock_size: 310,
-  alarm_size: 108,
-  date_margin: 0,
-  clock_margin: -120,
-  alarm_margin: 0,
+  width: 720,
+  height: 480,
+  date_x: 0,
+  clock_x: 0,
+  alarm_x: 0,
+  date_y: 175,
+  clock_y: 0,
+  alarm_y: -155,
+  date_size: 70,
+  clock_size: 200,
+  alarm_size: 70,
   date_font: 'sans-serif',
   clock_font: 'math',
   alarm_font: 'sans-serif',
@@ -101,15 +101,17 @@ if (useModel) {
   form.use_12hr = computed(() => model.value.use_12hr)
   form.show_ampm = computed(() => model.value.show_ampm)
   form.shorten_ampm = computed(() => model.value.shorten_ampm)
-  form.date_order = computed(() => model.value.date_order)
-  form.clock_order = computed(() => model.value.clock_order)
-  form.alarm_order = computed(() => model.value.alarm_order)
+  form.width = computed(() => model.value.width)
+  form.height = computed(() => model.value.height)
+  form.date_x = computed(() => model.value.date_x)
+  form.clock_x = computed(() => model.value.clock_x)
+  form.alarm_x = computed(() => model.value.alarm_x)
+  form.date_y = computed(() => model.value.date_y)
+  form.clock_y = computed(() => model.value.clock_y)
+  form.alarm_y = computed(() => model.value.alarm_y)
   form.date_size = computed(() => model.value.date_size)
   form.clock_size = computed(() => model.value.clock_size)
   form.alarm_size = computed(() => model.value.alarm_size)
-  form.date_margin = computed(() => model.value.date_margin)
-  form.clock_margin = computed(() => model.value.clock_margin)
-  form.alarm_margin = computed(() => model.value.alarm_margin)
   form.date_font = computed(() => model.value.date_font)
   form.clock_font = computed(() => model.value.clock_font)
   form.alarm_font = computed(() => model.value.alarm_font)
@@ -125,24 +127,23 @@ else {
   model.value.use_12hr = computed(() => form.use_12hr)
   model.value.show_ampm = computed(() => form.show_ampm)
   model.value.shorten_ampm = computed(() => form.shorten_ampm)
-  model.value.date_order = computed(() => form.date_order)
-  model.value.clock_order = computed(() => form.clock_order)
-  model.value.alarm_order = computed(() => form.alarm_order)
+  model.value.width = computed(() => form.width)
+  model.value.height = computed(() => form.height)
+  model.value.date_x = computed(() => form.date_x)
+  model.value.clock_x = computed(() => form.clock_x)
+  model.value.alarm_x = computed(() => form.alarm_x)
+  model.value.date_y = computed(() => form.date_y)
+  model.value.clock_y = computed(() => form.clock_y)
+  model.value.alarm_y = computed(() => form.alarm_y)
   model.value.date_size = computed(() => form.date_size)
   model.value.clock_size = computed(() => form.clock_size)
   model.value.alarm_size = computed(() => form.alarm_size)
-  model.value.date_margin = computed(() => form.date_margin)
-  model.value.clock_margin = computed(() => form.clock_margin)
-  model.value.alarm_margin = computed(() => form.alarm_margin)
   model.value.date_font = computed(() => form.date_font)
   model.value.clock_font = computed(() => form.clock_font)
   model.value.alarm_font = computed(() => form.alarm_font)
 }
 
 const submit = () => {
-  // console.log(useModel)
-  // console.log(useModel.value)
-  console.log(props.type)
   if (props.type == "update") {
     form.put(route('clocks.update', { 'clock': model.value.id }));
     router.visit(route('clocks.show', { 'clock': model.value.id }), {

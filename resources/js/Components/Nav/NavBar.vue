@@ -60,7 +60,7 @@ const closeMenu = () => {
 
 <template>
   <SlideTransition>
-    <div v-if="showNav" class="flex flex-row h-8 w-full bg-gray-300 dark:bg-gray-700">
+    <div v-if="showNav" class="flex flex-row h-8 w-full bg-gray-300 dark:bg-gray-700 z-20">
       <div class="flex flex-shrink flex-col justify-around">
         <Link href="/" class="mx-1 text-xl">
         <img v-if="props.logo" :src="props.logo" />
@@ -109,7 +109,7 @@ const closeMenu = () => {
         </div>
       </div>
     </div>
-    <div v-else class="absolute top-1 right-1 cursor-pointer text-gray-300 dark:text-gray-700"
+    <div v-else class="absolute top-1 right-1 cursor-pointer text-gray-300 dark:text-gray-700 z-20"
       @click="showNav = !showNav">
       <Icon icon="arrow" iconSize="sm" />
     </div>

@@ -9,6 +9,7 @@ import BasicPanel from '@/Components/BasicPanel.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import BasicButton from '@/Components/BasicButton.vue'
 import ClockForm from './Partials/ClockForm.vue'
+import ClockDisplay from './Partials/ClockDisplay.vue'
 
 const orderArr = ref([
   {
@@ -37,15 +38,17 @@ const form = useForm({
   use_12hr: true,
   show_ampm: true,
   shorten_ampm: true,
-  date_order: 1,
-  clock_order: 2,
-  alarm_order: 3,
-  date_size: 108,
-  clock_size: 310,
-  alarm_size: 108,
-  date_margin: 0,
-  clock_margin: -120,
-  alarm_margin: 0,
+  width: 720,
+  height: 480,
+  date_x: 0,
+  clock_x: 0,
+  alarm_x: 0,
+  date_y: 175,
+  clock_y: 0,
+  alarm_y: -155,
+  date_size: 70,
+  clock_size: 200,
+  alarm_size: 70,
   date_font: 'sans-serif',
   clock_font: 'math',
   alarm_font: 'sans-serif',
@@ -103,27 +106,15 @@ setInterval(() => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full">
-    <h3>
-      Create a Ne Clock
-    </h3>
-    <ClockForm v-model="form" type="new" />
-
-    <div class="flex flex-col w-full justify-around">
-      <div v-if="form.date_format != 'off'"
-        :style="`font-size: ${form.date_size}px; font-family: ${form.date_font}; margin: ${form.date_margin}px auto; order: ${form.date_order};`">
-        <span v-if="form.weekday_format !== 'hide'">{{ currWeekday }},</span> {{ currMonth }} {{ currMonthDay }}
-      </div>
-      <div
-        :style="`font-size: ${form.clock_size}px; font-family: ${form.clock_font}; margin: ${form.clock_margin}px auto; order: ${form.clock_order};`">
-        {{ currHour }}:{{ currMinute }}<span v-if="form.show_seconds">:{{ currSecond }}</span> <span
-          v-if="form.show_ampm">{{
-            currAMPM }}</span>
-      </div>
-      <div v-if="form.show_next_alarm"
-        :style="`font-size: ${form.alarm_size}px; font-family: ${form.alarm_font}; margin: ${form.alarm_margin}px auto; order: ${form.alarm_order};`">
-        next alarm
+  <div class="w-full">
+    <div class="container mx-auto">
+      <div class="flex flex-col w-full">
+        <h3>
+          Create a New Clock
+        </h3>
+        <ClockForm v-model="form" />
       </div>
     </div>
+    <ClockDisplay v-model="form" />
   </div>
 </template>

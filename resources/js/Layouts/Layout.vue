@@ -10,7 +10,7 @@ import darkMode from '@/Stores/darkMode.js'
     <div class="flex flex-col bg-white dark:bg-black text-black dark:text-white" style="min-height: 100vh;">
       <NavBar sitename="Smart Clock" />
       <Banner />
-      <div class="container flex flex-grow mx-auto">
+      <div class="flex flex-grow mx-auto w-full z-10">
         <div class="relative flex flex-grow flex-col w-full">
           <transition name="fade">
             <slot />

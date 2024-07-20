@@ -14,15 +14,17 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col w-full">
-    <div class="flex flex-row mt-2">
-      <LinkButton :href="route('clocks.create')" type="standard">Create Clock</LinkButton>
-    </div>
-    <div class="flex flex-row flex-wrap justify-around">
-      <Link :href="route('clocks.show', { 'clock': clock.id })" v-for="(clock, i) in clocks" :key="clock.id"
-        class="mt-2 mx-1 px-3 py-2 bg-gray-200 dark:bg-gray-800 glossy rounded-full">
-      <Icon icon="clock" /> {{ clock.name }}
-      </Link>
+  <div class="container mx-auto">
+    <div class="flex flex-col w-full">
+      <div class="flex flex-row mt-2">
+        <LinkButton :href="route('clocks.create')" type="standard">Create Clock</LinkButton>
+      </div>
+      <div class="flex flex-row flex-wrap justify-around">
+        <Link :href="route('clocks.show', { 'clock': clock.id })" v-for="(clock, i) in clocks" :key="clock.id"
+          class="mt-2 mx-1 px-3 py-2 bg-gray-200 dark:bg-gray-800 glossy rounded-full">
+        <Icon icon="clock" /> {{ clock.name }}
+        </Link>
+      </div>
     </div>
   </div>
 </template>
