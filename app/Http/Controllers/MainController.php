@@ -18,23 +18,23 @@ class MainController extends Controller
         $fMessages = session()->get('fMessages', []);
         $fMessages[] = $msg;
         session()->put('fMessages', $fMessages);
+        return 'success';
     }
 
     public function removeFlash(Request $request) 
     {
         $msg = $request->input('flash');
-        // dd($msg);
         $fMessages = $request->session()->get('fMessages', []);
         foreach ($fMessages as $key => $flash) {
             if (is_object($flash)) {
                 $flash = (array) $flash;
             }
-            // dd($flash);
             if ($msg['id'] == $flash['id']) {
                 unset($fMessages[$key]);
                 break;
             }
         }
         session()->put('fMessages', $fMessages);
+        return 'success';
     }
 }

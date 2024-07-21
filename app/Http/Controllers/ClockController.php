@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Clock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -15,9 +14,7 @@ class ClockController extends Controller
      */
     public function show(Request $request, Clock $clock)
     {
-        // flash("test");
         return Inertia::render('Clocks/Show', ['clock' => $clock]);
-        // return Inertia::render('Clocks/Show', ['clock' => $clock, 'flash' => [flash("test")]]);
     }
 
     /**
@@ -73,8 +70,6 @@ class ClockController extends Controller
         $clock = Clock::create($validateAttributes);
 
         return to_route('clocks.show', ['clock' => $clock]);
-        // return to_route('dashboard');
-        // return Inertia::render('Dashboard');
     }
 
     /**

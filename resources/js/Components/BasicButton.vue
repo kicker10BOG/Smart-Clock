@@ -1,6 +1,6 @@
 <template>
   <button
-    class="inline-flex items-center justify-center font-medium rounded-full text-center my-auto glossy"
+    class="inline-flex items-center justify-center font-medium rounded-full text-center glossy"
     :class="`${buttonClass} ${sizeClass}`"
     :type="buttonType"
     :name="name ? name : type"
@@ -47,13 +47,6 @@ export default {
       validator: (value) => ["xs", "sm", "md", "lg", "xl"].indexOf(value) !== -1,
     },
     disabled: {
-      type: Boolean,
-      default: false,
-    },
-    class: {
-      default: null,
-    },
-    fullWidth: {
       type: Boolean,
       default: false,
     },
@@ -113,10 +106,9 @@ export default {
         sizeClass = "text-md px-2 py-2";
         break;
     }
-    sizeClass += this.fullWidth ? " w-full" : "";
     return {
       visible: true,
-      buttonClass: this.class ? this.class : typeClass,
+      buttonClass: typeClass,
       sizeClass,
       buttonType: buttonType,
     };

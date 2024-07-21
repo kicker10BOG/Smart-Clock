@@ -1,7 +1,6 @@
 <script setup>
-import FlashMessage from '@/Components/FlashMessage.vue';
-import { usePage } from '@inertiajs/vue3';
-import { ref, watch } from "vue"
+import FlashMessage from '@/Components/FlashMessage.vue'
+import { ref } from "vue"
 
 const props = defineProps({
   topOffset: {
@@ -11,21 +10,12 @@ const props = defineProps({
     default: 0.85,
   },
 })
-
-const staticDiv = ref(null)
-const absoluteDiv = ref(null)
-
-const page = usePage()
-console.log(page.props.flash);
-watch(page.props.flash, (newFlash) => {
-  console.log(newFlash)
-})
 </script>
 
 <template>
-  <div ref="staticDiv" class="fixed flex flex-row justify-around w-full z-20"
+  <div class="fixed flex flex-row justify-around w-full z-20"
     :style="`top: ${topOffset}px; opacity: ${opacity};`">
-    <div ref="absoluteDiv" class="container mx-auto">
+    <div class="container mx-auto">
       <transition name="fade" v-for="(msg, i) in $page.props.flash" :key="msg.id">
         <FlashMessage :message="msg" />
       </transition>

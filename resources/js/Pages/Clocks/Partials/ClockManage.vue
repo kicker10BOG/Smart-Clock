@@ -1,4 +1,5 @@
 <script setup>
+import { router } from '@inertiajs/vue3'
 import VDropdown from '@/Components/VDropdown.vue'
 import SlideTransition from '@/Components/SlideTransition.vue'
 import BasicButton from '@/Components/BasicButton.vue'
@@ -7,9 +8,21 @@ import Icon from '@/Components/Icon.vue'
 import ClockForm from './ClockForm.vue'
 import ClockAlarms from './ClockAlarms.vue'
 import showNav from '@/Stores/showNav.js'
-import LinkButton from '@/Components/LinkButton.vue'
+import { addFlashMsg } from '@/Stores/flashMessages'
 
 const model = defineModel()
+
+const deleteClock = () => {
+  router.delete(route('clocks.destroy', { 'clock': model.value.id }))
+  addFlashMsg({
+    title: '',
+    message: 'Clock Deleted',
+    closeable: true,
+    delay: 5,
+    type: 'danger',
+    important: false,
+  })
+}
 </script>
 
 <template>
@@ -36,9 +49,9 @@ const model = defineModel()
           <BasicPanel :collapsible="true" :startCollapsed="true">
             <template #header>delete</template>
             <div class="flex flex-row justify-center w-full">
-              <LinkButton :href="route('clocks.destroy', { 'clock': model.id })" type="danger" method="delete" class="my-2"
-                as="button">Delete
-              </LinkButton>
+              <BasicButton @click="deleteClock" type="danger" class="my-2">
+                Delete
+              </BasicButton>
             </div>
           </BasicPanel>
         </div>

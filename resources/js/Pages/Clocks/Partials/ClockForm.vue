@@ -1,5 +1,4 @@
 <script setup>
-import axios from "axios";
 import { ref, computed } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import ClockInnerForm from './ClockInnerForm.vue'
@@ -148,16 +147,6 @@ else {
 const submit = () => {
   if (props.type == "update") {
     form.put(route('clocks.update', { 'clock': model.value.id }))
-    // axios.put(route('clocks.update', { 'clock': model.value.id }), form)
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // router.visit(route('clocks.show', { 'clock': model.value.id }), {
-    //   only: ['clock'],
-    // })
     addFlashMsg({
       title: '', 
       message: 'Clock Saved', 
@@ -173,7 +162,7 @@ const submit = () => {
       title: '', 
       message: 'Clock Created', 
       closeable: true,
-      delay: 0,
+      delay: 5,
       type: 'success',
       important: false, 
     })
