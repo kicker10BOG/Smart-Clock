@@ -49,7 +49,7 @@ const closeModal = (e) => {
             <slot />
           </div>
           <!-- Modal footer -->
-          <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+          <div v-if="$slots.footer" class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
             <slot name="footer" />
           </div>
         </div>

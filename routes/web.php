@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlarmController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ClockController;
@@ -29,5 +30,19 @@ Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->gro
         Route::post('/new', 'store')->name('store');
         Route::put('/{clock}', 'update')->whereNumber('clock')->name('update');
         Route::delete('/{clock}', 'destroy')->whereNumber('clock')->name('destroy');
+    });
+});
+
+Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->group(function () {
+    Route::middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified',
+    ])->group(function () {
+        Route::post('/new', 'store')->name('store');
+        Route::put('/{alarm}', 'update')->whereNumber('alarm')->name('update');
+        Route::delete('/{alarm}', 'destroy')->whereNumber('alarm')->name('destroy');
+        Route::put('/{alarm}/enable', 'enable')->whereNumber('alarm')->name('enable');
+        Route::put('/{alarm}/disable', 'disable')->whereNumber('alarm')->name('disable');
     });
 });

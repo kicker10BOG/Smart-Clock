@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Alarm;
+use App\Models\Clock;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -27,9 +28,9 @@ class AlarmPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): Response
+    public function create(User $user, Clock $clock): Response
     {
-        return $user ? Response::allow() : Response::deny('This alarm does not belong to you');
+        return $user && $clock && $user->id != $clock->user_id ? Response::allow() : Response::deny('This clock does not belong to you');
     }
 
     /**
@@ -37,7 +38,7 @@ class AlarmPolicy
      */
     public function update(User $user, Alarm $alarm): Response
     {
-        return $user && $user->id == $alarm->clock->user->id ? Response::allow() : Response::deny('This alarm does not belong to you');
+        return $user && $user->id == $alarm->clock->user_id ? Response::allow() : Response::deny('This alarm does not belong to you');
     }
 
     /**
@@ -45,7 +46,7 @@ class AlarmPolicy
      */
     public function delete(User $user, Alarm $alarm): Response
     {
-        return $user && $user->id == $alarm->clock->user->id ? Response::allow() : Response::deny('This alarm does not belong to you');
+        return $user && $user->id == $alarm->clock->user_id ? Response::allow() : Response::deny('This alarm does not belong to you');
     }
 
     /**
@@ -53,7 +54,7 @@ class AlarmPolicy
      */
     public function restore(User $user, Alarm $alarm): Response
     {
-        return $user && $user->id == $alarm->clock->user->id ? Response::allow() : Response::deny('This alarm does not belong to you');
+        return $user && $user->id == $alarm->clock->user_id ? Response::allow() : Response::deny('This alarm does not belong to you');
     }
 
     /**
@@ -61,6 +62,6 @@ class AlarmPolicy
      */
     public function forceDelete(User $user, Alarm $alarm): Response
     {
-        return $user && $user->id == $alarm->clock->user->id ? Response::allow() : Response::deny('This alarm does not belong to you');
+        return $user && $user->id == $alarm->clock->user_id ? Response::allow() : Response::deny('This alarm does not belong to you');
     }
 }

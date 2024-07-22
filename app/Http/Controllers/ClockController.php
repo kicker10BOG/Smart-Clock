@@ -39,7 +39,7 @@ class ClockController extends Controller
         }
 
         $validateAttributes = $request->validate([
-            'name' => ['required', 'max: 255'],
+            'name' => ['string', 'required', 'max: 255'],
             'month_format' => [Rule::in(['short', 'long'])],
             'weekday_format' => [Rule::in(['short', 'long', 'hidden'])],
             'width' => ['integer', 'numeric', 'between:1, 10000'],
@@ -124,6 +124,7 @@ class ClockController extends Controller
             abort(403);
         }
 
+        $clock->alarms()->delete();
         $clock->delete();
 
         return to_route('dashboard');

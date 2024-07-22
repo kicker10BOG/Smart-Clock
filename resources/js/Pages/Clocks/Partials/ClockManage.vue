@@ -28,7 +28,7 @@ const deleteClock = () => {
 <template>
   <SlideTransition direction="up">
     <div v-if="showNav" class="fixed right-0 bottom-0">
-      <VDropdown direction="left" placement="right" vertPlacement="top" subHeight="130" opacity="0.95"
+      <VDropdown direction="left" placement="right" vertPlacement="top" subHeight="130" opacity="0.97"
         :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
         <template #button>
           <div class="fixed bottom-10 right-2">
@@ -49,7 +49,7 @@ const deleteClock = () => {
           <BasicPanel :collapsible="true" :startCollapsed="true">
             <template #header>delete</template>
             <div class="flex flex-row justify-center w-full">
-              <BasicButton @click="deleteClock" type="danger" class="my-2">
+              <BasicButton @click="deleteClock" type="danger" size="sm" class="my-2">
                 Delete
               </BasicButton>
             </div>

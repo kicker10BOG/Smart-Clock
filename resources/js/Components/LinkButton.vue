@@ -56,22 +56,22 @@ switch (props.type) {
 let sizeClass = "";
 switch (props.size) {
   case "xs":
-    sizeClass = "text-xs px-2 py-1";
+    sizeClass = "text-xs px-1 py-1";
     break;
   case "sm":
-    sizeClass = "text-sm px-3 py-1";
+    sizeClass = "text-sm px-1 py-1";
     break;
   case "md":
-    sizeClass = "text-md px-4 py-2";
+    sizeClass = "text-md px-2 py-2";
     break;
   case "lg":
-    sizeClass = "text-lg px-5 py-2";
+    sizeClass = "text-lg px-4 py-2";
     break;
   case "xl":
     sizeClass = "text-xl px-5 py-2";
     break;
   default:
-    sizeClass = "text-md px-4 py-2";
+    sizeClass = "text-md px-2 py-2";
     break;
 }
 </script>

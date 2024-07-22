@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useForm, router } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import ClockInnerForm from './ClockInnerForm.vue'
 import BasicButton from '@/Components/BasicButton.vue'
 import { addFlashMsg } from '@/Stores/flashMessages.js'
@@ -175,7 +175,7 @@ const submit = () => {
     <ClockInnerForm v-model="model" v-if="useModel" />
     <ClockInnerForm v-model="form" v-else />
     <div class="flex flex-row justify-end">
-      <BasicButton @click="submit">Save</BasicButton>
+      <BasicButton @click="submit" size="sm">Save</BasicButton>
     </div>
   </div>
 </template>

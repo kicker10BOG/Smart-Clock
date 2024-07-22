@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Clock extends Model
 {
     use HasFactory;
-    
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -25,6 +25,13 @@ class Clock extends Model
      * @var array
      */
     protected $appends = ['alarm_count', 'clock_colors_count', 'username'];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['alarms'];
 
     /**
      * The user this belongs to
@@ -53,7 +60,7 @@ class Clock extends Model
     /**
      * Get the amount of alarms
      */
-    public function alarmCount() : Attribute
+    public function alarmCount(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->alarms()->count()
@@ -63,7 +70,7 @@ class Clock extends Model
     /**
      * Get the amount of clockColors
      */
-    public function clockColorsCount() : Attribute
+    public function clockColorsCount(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->clockColors()->count()
@@ -73,7 +80,7 @@ class Clock extends Model
     /**
      * Get the username 
      */
-    public function username() : Attribute
+    public function username(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->user()->first()->name

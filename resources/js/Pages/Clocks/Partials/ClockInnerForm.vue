@@ -21,11 +21,11 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
       <div class="flex flex-row flex-wrap">
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
           <TextInput id="width" label="Width (px)" v-model="model.width" type="number" step="1" min="1"
-            inputWidthClass="w-24" />
+            inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
           <TextInput id="width" label="Height (px)" v-model="model.height" type="number" step="1" min="1"
-            inputWidthClass="w-24" />
+            inputClass="w-24" />
         </div>
       </div>
     </BasicPanel>
@@ -83,27 +83,27 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
         <div class="flex flex-row flex-wrap">
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="date_x" label="Date X (px)" v-model="model.date_x" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="date_y" label="Date Y (px)" v-model="model.date_y" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="clock_x" label="Time X (px)" v-model="model.clock_x" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="clock_y" label="Time Y (px)" v-model="model.clock_y" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="alarm_x" label="Alarm X (px)" v-model="model.alarm_x" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
           <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
             <TextInput id="alarm_y" label="Alarm Y (px)" v-model="model.alarm_y" type="number" step="1"
-              inputWidthClass="w-24" />
+              inputClass="w-24" />
           </div>
         </div>
       </div>
@@ -143,15 +143,15 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
       <div class="flex flex-row flex-wrap">
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
           <TextInput id="date_size" label="Date Font Size (px)" v-model="model.date_size" type="number" step="1" min="1"
-            inputWidthClass="w-24" />
+            inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
           <TextInput id="clock_size" label="Time Font Size (px)" v-model="model.clock_size" type="number" step="1"
-            min="1" inputWidthClass="w-24" />
+            min="1" inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
           <TextInput id="alarm_size" label="Alarm Font Size (px)" v-model="model.alarm_size" type="number" step="1"
-            min="1" inputWidthClass="w-24" />
+            min="1" inputClass="w-24" />
         </div>
       </div>
     </BasicPanel>

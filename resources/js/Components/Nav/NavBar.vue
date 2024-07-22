@@ -59,7 +59,7 @@ const closeMenu = () => {
           <div class="mx-1 my-auto">
             <VDropdown v-model="isOpen">
               <template #button>
-                <Icon icon="menu" iconSize="md" extraClass="cursor-pointer" />
+                <Icon icon="menu" size="md" extraClass="cursor-pointer" />
               </template>
               <Toggle v-model="darkMode">
                 <template #leftIcon>
@@ -87,14 +87,14 @@ const closeMenu = () => {
             </VDropdown>
           </div>
           <!-- <div class="my-auto ml-2 mr-1 cursor-pointer rotate-180" @click="showNav = !showNav">
-          <Icon icon="arrow" iconSize="sm" />
+          <Icon icon="arrow" size="sm" />
         </div> -->
         </div>
       </div>
     </div>
     <div v-else class="absolute top-1 right-1 cursor-pointer text-gray-300 dark:text-gray-700 z-20"
       @click="showNav = !showNav">
-      <Icon icon="arrow" iconSize="sm" />
+      <Icon icon="arrow" size="sm" />
     </div>
   </SlideTransition>
   <LoginModal v-model="openLoginModal" />

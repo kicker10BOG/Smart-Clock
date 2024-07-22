@@ -42,7 +42,7 @@ defineExpose({ focus: () => input.value.focus() })
 </script>
 
 <template>
-  <div class="flex justify-around m-auto" ref="div"
+  <div class="flex justify-around" ref="div"
     :class="{ 'flex-col': position == 'top', 'flex-row': position == 'right', 'flex-col-reverse': position == 'bottom', 'flex-row-reverse': position == 'right' }">
     <div class="m-auto">
       <label :for="id" class="m-1 font-medium">{{ label }}
