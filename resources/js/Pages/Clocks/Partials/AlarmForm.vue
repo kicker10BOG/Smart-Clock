@@ -23,6 +23,13 @@ const form = useForm({
   },
   sleep_length: model.value ? model.value.sleep_length : 10,
   enabled: model.value ? Boolean(model.value.enabled) : true,
+  sunday: model.value ? Boolean(model.value.sunday) : false,
+  monday: model.value ? Boolean(model.value.monday) : true,
+  tuesday: model.value ? Boolean(model.value.tuesday) : true,
+  wednesday: model.value ? Boolean(model.value.wednesday) : true,
+  thursday: model.value ? Boolean(model.value.thursday) : true,
+  friday: model.value ? Boolean(model.value.friday) : true,
+  saturday: model.value ? Boolean(model.value.saturday) : false,
 })
 
 const submitForm = () => {
@@ -54,6 +61,15 @@ const submitForm = () => {
       </div>
       <div class="flex flex-row w-72 justify-start">
         <Checkbox id="enabled" label="Enable" v-model="form.enabled" />
+      </div>
+      <div class="flex flex-row w-72 justify-start">
+        <Checkbox id="sunday" label="Sun" v-model="form.sunday" position="top" />
+        <Checkbox id="monday" label="Mon" v-model="form.monday" position="top" />
+        <Checkbox id="tuesday" label="Tue" v-model="form.tuesday" position="top" />
+        <Checkbox id="wednesday" label="Wed" v-model="form.wednesday" position="top" />
+        <Checkbox id="thursday" label="Thu" v-model="form.thursday" position="top" />
+        <Checkbox id="friday" label="Fri" v-model="form.friday" position="top" />
+        <Checkbox id="saturday" label="Sat" v-model="form.saturday" position="top" />
       </div>
       <div class="flex flex-row w-72 justify-end">
         <BasicButton type="submit" @click="submitForm">Submit</BasicButton>

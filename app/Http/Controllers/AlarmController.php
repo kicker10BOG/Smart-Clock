@@ -26,6 +26,13 @@ class AlarmController extends Controller
         $validateAttributes['hour'] = $request->input('time')['hour'];
         $validateAttributes['minute'] = $request->input('time')['minute'];
         $validateAttributes['enabled'] = $request->input('enabled');
+        $validateAttributes['sunday'] = $request->input('sunday');
+        $validateAttributes['monday'] = $request->input('monday');
+        $validateAttributes['tuesday'] = $request->input('tuesday');
+        $validateAttributes['wednesday'] = $request->input('wednesday');
+        $validateAttributes['thursday'] = $request->input('thursday');
+        $validateAttributes['friday'] = $request->input('friday');
+        $validateAttributes['saturday'] = $request->input('saturday');
         $validateAttributes['clock_id'] = $clock->id;
         Alarm::create($validateAttributes);
         

@@ -18,6 +18,14 @@ return new class extends Migration
             $table->string('name', 255)->nullable()->default(null);
             $table->unsignedTinyInteger('hour')->default(8);
             $table->unsignedTinyInteger('minute')->default(0);
+            $table->boolean('enabled')->default(true);
+            $table->boolean('sunday')->default(false);
+            $table->boolean('monday')->default(true);
+            $table->boolean('tuesday')->default(true);
+            $table->boolean('wednesday')->default(true);
+            $table->boolean('thursday')->default(true);
+            $table->boolean('friday')->default(true);
+            $table->boolean('saturday')->default(false);
             $table->boolean('active')->default(true);
             $table->unsignedTinyInteger('sleep_length')->default(10);
             $table->unsignedTinyInteger('sleep_count')->default(0);
