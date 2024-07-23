@@ -85,6 +85,9 @@ function getNextOccurenceDiff(now, alarm) {
 }
 
 function getNextAlarm() {
+  if (model.value.alarms == undefined) {
+    return
+  }
   const now = new Date()
   let nA = null
   model.value.alarms.forEach(alarm => {

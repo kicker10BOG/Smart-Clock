@@ -1,19 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import InputError from '@/Components/InputError.vue'
-import TextInput from '@/Components/TextInput.vue'
-import SelectInput from '@/Components/SelectInput.vue'
-import Checkbox from '@/Components/Checkbox.vue'
-import BasicPanel from '@/Components/BasicPanel.vue'
-import { VueDraggable } from 'vue-draggable-plus'
-import BasicButton from '@/Components/BasicButton.vue'
 import ClockForm from './Partials/ClockForm.vue'
 import ClockDisplay from './Partials/ClockDisplay.vue'
 
 const orderArr = ref([
   {
-    id: 'date',
+    id: 'date7',
     name: 'Date',
   },
   {
@@ -26,8 +19,6 @@ const orderArr = ref([
   },
 ])
 
-const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])
-
 const form = useForm({
   name: '',
   month_format: 'short',
@@ -38,17 +29,17 @@ const form = useForm({
   use_12hr: true,
   show_ampm: true,
   shorten_ampm: true,
-  width: 720,
-  height: 480,
+  width: 1024,
+  height: 600,
   date_x: 0,
   clock_x: 0,
   alarm_x: 0,
-  date_y: 175,
+  date_y: 225,
   clock_y: 0,
-  alarm_y: -155,
-  date_size: 70,
-  clock_size: 200,
-  alarm_size: 70,
+  alarm_y: -215,
+  date_size: 100,
+  clock_size: 310,
+  alarm_size: 80,
   date_font: 'sans-serif',
   clock_font: 'math',
   alarm_font: 'sans-serif',
