@@ -29,9 +29,9 @@ return new class extends Migration
             $table->smallInteger('date_x')->default(0);
             $table->smallInteger('clock_x')->default(0);
             $table->smallInteger('alarm_x')->default(0);
-            $table->smallInteger('date_y')->default(175);
+            $table->smallInteger('date_y')->default(215);
             $table->smallInteger('clock_y')->default(0);
-            $table->smallInteger('alarm_y')->default(-155);
+            $table->smallInteger('alarm_y')->default(-215);
             $table->unsignedSmallInteger('date_size')->default(100);
             $table->unsignedSmallInteger('clock_size')->default(310);
             $table->unsignedSmallInteger('alarm_size')->default(80);
