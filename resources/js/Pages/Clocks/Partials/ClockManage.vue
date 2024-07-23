@@ -8,27 +8,18 @@ import Icon from '@/Components/Icon.vue'
 import ClockForm from './ClockForm.vue'
 import ClockAlarms from './ClockAlarms.vue'
 import showNav from '@/Stores/showNav.js'
-import { addFlashMsg } from '@/Stores/flashMessages'
 
 const model = defineModel()
 
 const deleteClock = () => {
   router.delete(route('clocks.destroy', { 'clock': model.value.id }))
-  addFlashMsg({
-    title: '',
-    message: 'Clock Deleted',
-    closeable: true,
-    delay: 5,
-    type: 'danger',
-    important: false,
-  })
 }
 </script>
 
 <template>
   <SlideTransition direction="up">
     <div v-if="showNav" class="fixed right-0 bottom-0">
-      <VDropdown direction="left" placement="right" vertPlacement="top" subHeight="130" opacity="0.97"
+      <VDropdown direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
         :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
         <template #button>
           <div class="fixed bottom-10 right-2">

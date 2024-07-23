@@ -3,7 +3,6 @@ import { ref, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import ClockInnerForm from './ClockInnerForm.vue'
 import BasicButton from '@/Components/BasicButton.vue'
-import { addFlashMsg } from '@/Stores/flashMessages.js'
 
 const model = defineModel()
 
@@ -15,49 +14,6 @@ const props = defineProps({
 })
 
 const useModel = model.value != undefined
-const orderArr = ref(new Array())
-
-if (useModel) {
-  for (let i = 0; i < 3; i++) {
-    if (model.value.date_x == i + 1) {
-      orderArr.value[i] = {
-        id: 'date',
-        name: 'Date',
-      }
-      continue
-    }
-    if (model.value.clock_x == i + 1) {
-      orderArr.value[i] = {
-        id: 'clock',
-        name: 'Clock',
-      }
-      continue
-    }
-    if (model.value.alarm_x == i + 1) {
-      orderArr.value[i] = {
-        id: 'alarm',
-        name: 'Alarm',
-      }
-      continue
-    }
-  }
-}
-else {
-  orderArr.value = [
-    {
-      id: 'date',
-      name: 'Date',
-    },
-    {
-      id: 'clock',
-      name: 'Clock',
-    },
-    {
-      id: 'alarm',
-      name: 'Alarm',
-    },
-  ]
-}
 
 const form = useForm({
   name: '',
@@ -146,34 +102,32 @@ else {
 
 const submit = () => {
   if (props.type == "update") {
-    form.put(route('clocks.update', { 'clock': model.value.id }))
-    addFlashMsg({
-      title: '', 
-      message: 'Clock Saved', 
-      closeable: true,
-      delay: 5,
-      type: 'success',
-      important: false, 
+    form.put(route('clocks.update', { 'clock': model.value.id }), {
+      onSuccess: () => {
+        model.value.show_date = Boolean(model.value.show_date)
+        model.value.show_next_alarm = Boolean(model.value.show_next_alarm)
+        model.value.show_seconds = Boolean(model.value.show_seconds)
+        model.value.use_12hr = Boolean(model.value.use_12hr)
+        model.value.show_ampm = Boolean(model.value.show_ampm)
+        model.value.shorten_ampm = Boolean(model.value.shorten_ampm)
+        form.show_date = computed(() => model.value.show_date)
+        form.show_next_alarm = computed(() => model.value.show_next_alarm)
+        form.show_seconds = computed(() => model.value.show_seconds)
+        form.use_12hr = computed(() => model.value.use_12hr)
+        form.show_ampm = computed(() => model.value.show_ampm)
+        form.shorten_ampm = computed(() => model.value.shorten_ampm)
+      }
     })
   }
   else {
     form.post(route('clocks.store'))
-    addFlashMsg({
-      title: '', 
-      message: 'Clock Created', 
-      closeable: true,
-      delay: 5,
-      type: 'success',
-      important: false, 
-    })
   }
 }
 </script>
 
 <template>
   <div class="flex flex-col w-fit m-auto">
-    <ClockInnerForm v-model="model" v-if="useModel" />
-    <ClockInnerForm v-model="form" v-else />
+    <ClockInnerForm v-model="model" />
     <div class="flex flex-row justify-end">
       <BasicButton @click="submit" size="sm">Save</BasicButton>
     </div>

@@ -55,22 +55,22 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
       </template>
       <div class="flex flex-row flex-wrap">
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="show_date" label="Show Date" v-model="model.show_date" />
+          <Checkbox id="show_date" label="Show Date" v-model="model.show_date" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="show_next_alarm" label="Show Next Alarm" v-model="model.show_next_alarm" />
+          <Checkbox id="show_next_alarm" label="Show Next Alarm" v-model="model.show_next_alarm" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="show_seconds" label="Show Seconds" v-model="model.show_seconds" />
+          <Checkbox id="show_seconds" label="Show Seconds" v-model="model.show_seconds" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="use_12hr" label="Use 12 Hr Format" v-model="model.use_12hr" />
+          <Checkbox id="use_12hr" label="Use 12 Hr Format" v-model="model.use_12hr" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="show_ampm" label="Show AM/PM" v-model="model.show_ampm" />
+          <Checkbox id="show_ampm" label="Show AM/PM" v-model="model.show_ampm" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="shorten_ampm" label="Shorten AM/PM to A/P" v-model="model.shorten_ampm" />
+          <Checkbox id="shorten_ampm" label="Shorten AM/PM to A/P" v-model="model.shorten_ampm" :value="true" />
         </div>
       </div>
     </BasicPanel>

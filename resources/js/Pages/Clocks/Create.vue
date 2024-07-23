@@ -3,21 +3,7 @@ import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import ClockForm from './Partials/ClockForm.vue'
 import ClockDisplay from './Partials/ClockDisplay.vue'
-
-const orderArr = ref([
-  {
-    id: 'date7',
-    name: 'Date',
-  },
-  {
-    id: 'clock',
-    name: 'Clock',
-  },
-  {
-    id: 'alarm',
-    name: 'Alarm',
-  },
-])
+import BasicPanel from '@/Components/BasicPanel.vue';
 
 const form = useForm({
   name: '',
@@ -103,9 +89,16 @@ setInterval(() => {
         <h3>
           Create a New Clock
         </h3>
-        <ClockForm v-model="form" type="new" class="z-10"/>
+        <ClockForm v-model="form" type="new" class="z-10" />
+        <BasicPanel :collapsible="true" :startCollapsed="true" class="z-0">
+          <template #header>Preview</template>
+          <div class="bg-white dark:bg-black w-full overflow-x-auto" :style="`min-width: ${form.width}px; height: ${form.height}px;`">
+            <div class="m-auto" :style="`width: ${form.width}px; height: ${form.height}px;`">
+              <ClockDisplay v-model="form" />
+            </div>
+          </div>
+        </BasicPanel>
       </div>
     </div>
-    <ClockDisplay v-model="form" />
   </div>
 </template>

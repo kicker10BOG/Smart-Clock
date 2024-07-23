@@ -69,6 +69,7 @@ class ClockController extends Controller
 
         $clock = Clock::create($validateAttributes);
 
+        flash('Clock Created');
         return to_route('clocks.show', ['clock' => $clock]);
     }
 
@@ -112,6 +113,7 @@ class ClockController extends Controller
 
         $clock->update($validateAttributes);
 
+        flash('Clock Updated');
         return to_route('clocks.show', ['clock' => $clock]);
     }
 
@@ -127,6 +129,7 @@ class ClockController extends Controller
         $clock->alarms()->delete();
         $clock->delete();
 
+        flash('Clock Deleted');
         return to_route('dashboard');
     }
 }

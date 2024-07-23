@@ -1,8 +1,7 @@
 <template>
   <div
     class="panel flex flex-col w-full overflow-y-visible"
-    :class="this.class"
-    :style="style"
+    :class="mainClass"
   >
     <div
       class="panel-header w-full text-center flex flex-row z-0"
@@ -67,13 +66,9 @@
 export default {
   name: "basic-panel",
   props: {
-    class: {
+    mainClass: {
       type: String,
       default: "rounded p-1 mx-auto my-1 shadow-sm bg-gray-200 dark:bg-gray-800",
-    },
-    style: {
-      type: String,
-      default: "",
     },
     headerClass: {
       type: String,

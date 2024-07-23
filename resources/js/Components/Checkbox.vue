@@ -39,6 +39,7 @@ onMounted(() => {
 })
 
 defineExpose({ focus: () => input.value.focus() })
+defineEmits(['update:model-value'])
 </script>
 
 <template>
@@ -50,7 +51,7 @@ defineExpose({ focus: () => input.value.focus() })
       </label>
     </div>
     <div class="m-auto">
-      <input :id="id" ref="input" type="checkbox" :value="value" v-model="model"
+      <input :id="id" ref="input" type="checkbox" :value="value" v-model="model" :checked="Boolean(model)"
         class="w-4 h-4 m-1 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-900 dark:border-gray-600" />
     </div>
   </div>
