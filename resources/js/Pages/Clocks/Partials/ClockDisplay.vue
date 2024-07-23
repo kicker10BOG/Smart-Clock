@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
 const model = defineModel()
 
+const nextAlarm = ref(null)
 const dateElement = ref(null)
 const timeElement = ref(null)
 const alarmElement = ref(null)
@@ -55,11 +56,53 @@ const updateTime = () => {
   currAMPM.value = model.value.shorten_ampm ? currAMPM.value : currAMPM.value + 'M'
 }
 
-updateTime()
+function getNextOccurenceDiff(now, alarm) {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+  let dateDiff = null
+  let dateDiffDay = null
+  for (let i = 0; i < 7; i++) {
+    if (alarm[days[i]]) {
+      let d = new Date(now)
+      d.setDate(d.getDate() + (7 + i - d.getDay()) % 7)
+      d.setHours(alarm.hour, alarm.minute, 0, 0)
+      let diff = d - now
+      if (diff < 0) {
+        d.setDate(d.getDate() + 7)
+        diff = d - now
+      }
+      if (dateDiff == null || diff < dateDiff) {
+        dateDiff = diff
+        dateDiffDay = i
+      }
+    }
+  }
+  return {
+    diff: dateDiff,
+    day: dateDiffDay,
+    alarm: alarm,
+    displayStr: `${weekdaysShort[dateDiffDay]}, ${model.value.use_12hr ? (alarm.hour == 0 ? 12 : alarm.hour % 12) : alarm.hour}:${alarm.minute < 10 ? `0${alarm.minute}` : alarm.minute} ${model.value.use_12hr ? (model.value.shorten_ampm ? (alarm.hour > 11 ? 'P' : 'A') : (alarm.hour > 11 ? 'PM' : 'AM')) : ''}`
+  }
+}
 
-setInterval(() => {
-  updateTime()
-}, 1000)
+function getNextAlarm() {
+  const now = new Date()
+  let nA = null
+  model.value.alarms.forEach(alarm => {
+    if (alarm.enabled) {
+      let nO = getNextOccurenceDiff(now, alarm)
+      if (nA == null || nO.diff < nA.diff) {
+        nA = { ...nO }
+      }
+    }
+  });
+  nextAlarm.value = nA
+}
+
+updateTime()
+getNextAlarm()
+
+setInterval(updateTime, 1000)
+setInterval(getNextAlarm, 2000)
 </script>
 
 <template>
@@ -70,12 +113,16 @@ setInterval(() => {
   <div ref="timeElement" class="absolute opacity-0 top-0 left-0 z-0"
     :style="`font-size: ${model.clock_size}px; font-family: ${model.clock_font};`">
     {{ currHour }}:{{ currMinute }}<span v-if="model.show_seconds">:{{ currSecond }}</span> <span
-      v-if="model.show_ampm">{{
+      v-if="model.use_12hr && model.show_ampm">{{
         currAMPM }}</span>
   </div>
   <div ref="alarmElement" class="absolute opacity-0 top-0 left-0 z-0"
     :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font};`">
-    next alarm
+    Next Alarm:
+    <span v-if="nextAlarm">
+      {{ nextAlarm.displayStr }}
+    </span>
+    <span v-else>None Enabled</span>
   </div>
   <div class="relative m-auto" :style="`width: ${model.width}px; height:${model.height}px;`">
     <div v-if="model.show_date && dateElement" class="absolute"
@@ -85,12 +132,16 @@ setInterval(() => {
     <div v-if="timeElement" class="absolute"
       :style="`font-size: ${model.clock_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
       {{ currHour }}:{{ currMinute }}<span v-if="model.show_seconds">:{{ currSecond }}</span> <span
-        v-if="model.show_ampm">{{
+        v-if="model.use_12hr && model.show_ampm">{{
           currAMPM }}</span>
     </div>
     <div v-if="model.show_next_alarm && alarmElement" class="absolute"
       :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; left: ${model.alarm_x + clockCenterX - (alarmElement.clientWidth / 2)}px; bottom: ${model.alarm_y + clockCentery - (alarmElement.clientHeight / 2)}px;`">
-      next alarm
+      Next Alarm:
+      <span v-if="nextAlarm">
+        {{ nextAlarm.displayStr }}
+      </span>
+      <span v-else>None Enabled</span>
     </div>
   </div>
 </template>

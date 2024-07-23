@@ -79,7 +79,7 @@ const form = useForm({
   alarm_y: -155,
   date_size: 70,
   clock_size: 200,
-  alarm_size: 70,
+  alarm_size: 55,
   date_font: 'sans-serif',
   clock_font: 'math',
   alarm_font: 'sans-serif',

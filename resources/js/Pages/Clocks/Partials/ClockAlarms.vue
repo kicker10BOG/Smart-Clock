@@ -12,7 +12,6 @@ const openEditModal = ref()
 const page = usePage()
 const clock = computed(() => (page.props.clock))
 
-
 const days = ref(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'])
 const daysShort = ref(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
 
@@ -45,8 +44,8 @@ onMounted(() => {
             type="good" size="sm">
             <Icon icon="check" size="sm" />
           </LinkButton>
-          <LinkButton v-else method="put" :href="route('alarms.enable', { alarm: alarm.id })" as="button"
-            type="bad" size="sm">
+          <LinkButton v-else method="put" :href="route('alarms.enable', { alarm: alarm.id })" as="button" type="bad"
+            size="sm">
             <Icon icon="x" size="sm" />
           </LinkButton>
         </div>
@@ -71,8 +70,8 @@ onMounted(() => {
             as="button" type="good" size="sm">
             {{ daysShort[j] }}
           </LinkButton>
-          <LinkButton v-else method="put" :href="route('alarms.enableDay', { alarm: alarm.id, day: day })"
-            as="button" type="bad" size="sm">
+          <LinkButton v-else method="put" :href="route('alarms.enableDay', { alarm: alarm.id, day: day })" as="button"
+            type="bad" size="sm">
             {{ daysShort[j] }}
           </LinkButton>
         </div>

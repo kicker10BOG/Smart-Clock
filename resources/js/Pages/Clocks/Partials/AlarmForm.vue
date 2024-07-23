@@ -33,7 +33,6 @@ const form = useForm({
 })
 
 const submitForm = () => {
-  console.log(form.id)
   if (form.id) {
     const url = route('alarms.update', {alarm: form.id})
     form.put(url)

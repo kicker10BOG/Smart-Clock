@@ -34,7 +34,7 @@ return new class extends Migration
             $table->smallInteger('alarm_y')->default(-155);
             $table->unsignedSmallInteger('date_size')->default(70);
             $table->unsignedSmallInteger('clock_size')->default(200);
-            $table->unsignedSmallInteger('alarm_size')->default(70);
+            $table->unsignedSmallInteger('alarm_size')->default(55);
             $table->enum('date_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('sans-serif');
             $table->enum('clock_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('math');
             $table->enum('alarm_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('sans-serif');
