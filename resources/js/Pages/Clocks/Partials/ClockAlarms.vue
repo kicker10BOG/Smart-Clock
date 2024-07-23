@@ -12,6 +12,10 @@ const openEditModal = ref()
 const page = usePage()
 const clock = computed(() => (page.props.clock))
 
+
+const days = ref(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'])
+const daysShort = ref(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
+
 onMounted(() => {
   openEditModal.value = []
   clock.value.alarms.forEach(alarm => {
@@ -21,12 +25,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full">
-    <div class="flex flex-row justify-around w-full">
-      <BasicButton class="mx-auto my-2" type="new" @click="openNewModal = true" size="sm">Add New Alarm</BasicButton>
+  <div class="flex flex-col w-full py-1">
+    <div class="flex flex-row justify-around w-full my-1">
+      <BasicButton class="mx-auto" type="new" @click="openNewModal = true" size="sm">Add New Alarm</BasicButton>
     </div>
     <div v-if="openEditModal" v-for="(alarm, i) in clock.alarms" :key="alarm.id"
-      class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg mx-2 my-1">
+      class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg mx-2 my-1 p-2">
       <div class="flex flex-row justify-start">
         <span class="mr-1">
           {{ alarm.name }}
@@ -38,11 +42,11 @@ onMounted(() => {
       <div class="flex flex-row justify-start">
         <div class="mr-l">
           <LinkButton v-if="alarm.enabled" method="put" :href="route('alarms.disable', { alarm: alarm.id })" as="button"
-            type="standard" size="sm">
+            type="good" size="sm">
             <Icon icon="check" size="sm" />
           </LinkButton>
-          <LinkButton v-else method="put" :href="route('alarms.enable', { alarm: alarm.id })" as="button" type="standard"
-            size="sm">
+          <LinkButton v-else method="put" :href="route('alarms.enable', { alarm: alarm.id })" as="button"
+            type="bad" size="sm">
             <Icon icon="x" size="sm" />
           </LinkButton>
         </div>
@@ -58,6 +62,18 @@ onMounted(() => {
           <LinkButton method="delete" :href="route('alarms.destroy', { alarm: alarm.id })" as="button" type="danger"
             size="sm">
             <Icon icon="trash" size="sm" />
+          </LinkButton>
+        </div>
+      </div>
+      <div class="flex flex-row justify-start">
+        <div v-for="(day, j) in days">
+          <LinkButton v-if="alarm[day]" method="put" :href="route('alarms.disableDay', { alarm: alarm.id, day: day })"
+            as="button" type="good" size="sm">
+            {{ daysShort[j] }}
+          </LinkButton>
+          <LinkButton v-else method="put" :href="route('alarms.enableDay', { alarm: alarm.id, day: day })"
+            as="button" type="bad" size="sm">
+            {{ daysShort[j] }}
           </LinkButton>
         </div>
       </div>

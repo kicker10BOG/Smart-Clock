@@ -36,6 +36,7 @@ switch (props.type) {
     typeClass =
       "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-800 dark:disabled:bg-blue-700";
     break;
+  case "good":
   case "new":
     typeClass =
       "text-white bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-green-800 dark:disabled:bg-green-700";
@@ -44,6 +45,7 @@ switch (props.type) {
     typeClass =
       "text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-300 dark:focus:ring-yellow-900 disabled:bg-yellow-500";
     break;
+  case "bad":
   case "reset":
   case "danger":
     typeClass =

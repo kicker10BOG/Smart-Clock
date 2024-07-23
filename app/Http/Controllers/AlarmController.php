@@ -112,4 +112,38 @@ class AlarmController extends Controller
         flash('Alarm Deleted');
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
+
+    /**
+     * Enable a day an Alarm
+     */
+    public function enableDay(Request $request, Alarm $alarm, String $day)
+    {
+        if ($request->user()->cannot('update', $alarm)) {
+            abort(403);
+        }
+        $day = strtolower($day);
+        $alarm->{$day} = true;
+        $alarm->save();
+        $day = ucfirst($day);
+        
+        flash("Alarm Enabled for {$day}");
+        return to_route('clocks.show', ['clock' => $alarm->clock]);
+    }
+
+    /**
+     * Disable a day an Alarm
+     */
+    public function disableDay(Request $request, Alarm $alarm, String $day)
+    {
+        if ($request->user()->cannot('update', $alarm)) {
+            abort(403);
+        }
+        $day = strtolower($day);
+        $alarm->{$day} = false;
+        $alarm->save();
+        $day = ucfirst($day);
+
+        flash("Alarm Disabled for {$day}");
+        return to_route('clocks.show', ['clock' => $alarm->clock]);
+    }
 }

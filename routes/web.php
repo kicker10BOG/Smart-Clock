@@ -44,5 +44,7 @@ Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->gro
         Route::delete('/{alarm}', 'destroy')->whereNumber('alarm')->name('destroy');
         Route::put('/{alarm}/enable', 'enable')->whereNumber('alarm')->name('enable');
         Route::put('/{alarm}/disable', 'disable')->whereNumber('alarm')->name('disable');
+        Route::put('/{alarm}/{day}/enable', 'enableDay')->whereNumber('alarm')->name('enableDay');
+        Route::put('/{alarm}/{day}/disable', 'disableDay')->whereNumber('alarm')->name('disableDay');
     });
 });
