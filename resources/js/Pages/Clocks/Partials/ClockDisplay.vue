@@ -54,17 +54,30 @@ const updateTime = () => {
   currMinute.value = currMinute.value > 9 ? currMinute.value : '0' + currMinute.value
   currSecond.value = currSecond.value > 9 ? currSecond.value : '0' + currSecond.value
   currAMPM.value = model.value.shorten_ampm ? currAMPM.value : currAMPM.value + 'M'
+
+  if (currTime.value.getSeconds() == 0 || currTime.value.getSeconds() == 1) {
+    console.log('check alarm')
+    if (nextAlarm.value) {
+      if (currTime.value.getDay() == nextAlarm.value.day && currTime.value.getHours() == nextAlarm.value.alarm.hour && currTime.value.getMinutes() == nextAlarm.value.alarm.minute) {
+        console.log('trigger alarm')
+        console.log(nextAlarm.value)
+      }
+    }
+  }
 }
 
 function getNextOccurenceDiff(now, alarm) {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
   let dateDiff = null
   let dateDiffDay = null
+  // console.log(`checking alarm: ${alarm.name}`, alarm)
   for (let i = 0; i < 7; i++) {
     if (alarm[days[i]]) {
       let d = new Date(now)
-      d.setDate(d.getDate() + (7 + i - d.getDay()) % 7)
-      d.setHours(alarm.hour, alarm.minute, 0, 0)
+      d.setHours(alarm.hour, alarm.minute, 0)
+      if (i != now.getDay()) {
+        d.setDate(now.getDate() + (7 + i - d.getDay()) % 7)
+      }
       let diff = d - now
       if (diff < 0) {
         d.setDate(d.getDate() + 7)

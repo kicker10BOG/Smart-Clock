@@ -55,10 +55,14 @@ watch(minute, (newVal, oldVal) => {
 
 watch(ampm, (newVal, oldVal) => {
   if (newVal == 'PM') {
-    model.value.hour += 12
+    if (model.value.hour < 12) {
+      model.value.hour += 12
+    }
   }
   else {
-    model.value.hour -= 12
+    if (model.value.hour >= 12) {
+      model.value.hour -= 12
+    }
   }
   updateTime()
 })
