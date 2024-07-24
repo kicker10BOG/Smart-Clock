@@ -20,7 +20,7 @@ class AlarmController extends Controller
         }
         $validateAttributes = $request->validate([
             'name' => ['string', 'required', 'max: 255'],
-            'sleep_length' => ['integer', 'numeric', 'required', 'min: 1'],
+            'snooze_length' => ['integer', 'numeric', 'required', 'min: 1'],
         ]);
 
         $validateAttributes['hour'] = $request->input('time')['hour'];
@@ -50,7 +50,7 @@ class AlarmController extends Controller
         }
         $validateAttributes = $request->validate([
             'name' => ['string', 'required', 'max: 255'],
-            'sleep_length' => ['integer', 'numeric', 'required', 'min: 1'],
+            'snooze_length' => ['integer', 'numeric', 'required', 'min: 1'],
         ]);
 
         $validateAttributes['hour'] = $request->input('time')['hour'];

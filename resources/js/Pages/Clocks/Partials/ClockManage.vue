@@ -10,6 +10,7 @@ import ClockAlarms from './ClockAlarms.vue'
 import showNav from '@/Stores/showNav.js'
 
 const model = defineModel()
+defineEmits(['update:model-value'])
 
 const deleteClock = () => {
   router.delete(route('clocks.destroy', { 'clock': model.value.id }))

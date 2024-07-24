@@ -25,6 +25,8 @@ const props = defineProps({
   },
 })
 
+defineEmits(['update:model-value'])
+
 const timeShow = ref('')
 const hour = ref(model ? (props.use_12hr ? ((model.value.hour % 12 == 0 ? 12 : (model.value.hour % 12))) : model.value.hour) : 8)
 const minute = ref(model ? model.value.minute : 0)

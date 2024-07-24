@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
+import BasicModal from '@/Components/BasicModal.vue'
+import BasicButton from '@/Components/BasicButton.vue';
 
 const model = defineModel()
+defineEmits(['update:model-value'])
 
 const dateStr = ref('')
 const timeStr = ref('')
@@ -9,8 +12,15 @@ const nextAlarm = ref(null)
 const dateElement = ref(null)
 const timeElement = ref(null)
 const alarmElement = ref(null)
+const audioElement = ref(null)
 const clockCenterX = computed(() => model.value.width / 2)
 const clockCentery = computed(() => model.value.height / 2)
+
+const alarmTriggered = ref(false)
+const triggeredAlarm = ref(null)
+const alarmSnoozed = ref(false)
+const snoozedAlarm = ref(null)
+const snoozedStr = ref('')
 
 const weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const weekdaysLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -35,7 +45,7 @@ const currMinute = ref(currTime.value.getMinutes())
 const currSecond = ref(currTime.value.getSeconds())
 const currAMPM = ref(currHour.value > 11 ? 'P' : 'A')
 
-const updateTime = () => {
+function updateTime() {
   currTime.value = new Date(Date.now())
   currMonth.value = currTime.value.getMonth()
   currWeekday.value = currTime.value.getDay()
@@ -60,12 +70,24 @@ const updateTime = () => {
   dateStr.value = `${currWeekday.value} ${currMonth.value} ${currMonthDay.value}`
   timeStr.value = `${currHour.value}:${currMinute.value}${currSecond.value} ${currAMPM.value}`
 
-  if (currTime.value.getSeconds() == 0 || currTime.value.getSeconds() == 1) {
-    console.log('check alarm')
+  if (currTime.value.getSeconds() == 0) {
+    if (alarmSnoozed.value) {
+      let d = new Date(currTime.value)
+      d.setHours(snoozedAlarm.value.hour, snoozedAlarm.value.minute, 0)
+      d.setTime(d.getTime() + snoozedAlarm.value.snooze_length * snoozedAlarm.value.snooze_count * 60000)
+      if (currTime.value.getHours() == d.getHours() && currTime.value.getMinutes() == d.getMinutes()) {
+        triggeredAlarm.value = { ...snoozedAlarm.value.alarm }
+        alarmTriggered.value = true
+        audioElement.value.load()
+        audioElement.value.play()
+      }
+    }
     if (nextAlarm.value) {
       if (currTime.value.getDay() == nextAlarm.value.day && currTime.value.getHours() == nextAlarm.value.alarm.hour && currTime.value.getMinutes() == nextAlarm.value.alarm.minute) {
-        console.log('trigger alarm')
-        console.log(nextAlarm.value)
+        triggeredAlarm.value = nextAlarm.value.alarm
+        alarmTriggered.value = true
+        audioElement.value.load()
+        audioElement.value.play()
       }
     }
   }
@@ -75,7 +97,23 @@ function getNextOccurenceDiff(now, alarm) {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
   let dateDiff = null
   let dateDiffDay = null
-  // console.log(`checking alarm: ${alarm.name}`, alarm)
+  if (alarmSnoozed.value) {
+    let d = new Date(now)
+    for (let i = 0; i < model.value.alarms.length; i++) {
+      if (model.value.alarms[i].id == snoozedAlarm.value.id) {
+        snoozedAlarm.value.hour = model.value.alarms[i].hour
+        snoozedAlarm.value.minute = model.value.alarms[i].minute
+        snoozedAlarm.value.snooze_length = model.value.alarms[i].snooze_length
+      }
+    }
+    d.setHours(snoozedAlarm.value.hour, snoozedAlarm.value.minute, 0)
+    d.setTime(d.getTime() + snoozedAlarm.value.snooze_length * snoozedAlarm.value.snooze_count * 60000)
+    dateDiff = d - now
+    dateDiffDay = d.getDay()
+    let hr = d.getHours()
+    let m = d.getMinutes()
+    snoozedStr.value = `${model.value.use_12hr ? (hr == 0 ? 12 : hr % 12) : hr}:${m < 10 ? 0 : ''}${m}`
+  }
   for (let i = 0; i < 7; i++) {
     if (alarm[days[i]]) {
       let d = new Date(now)
@@ -119,6 +157,26 @@ function getNextAlarm() {
   nextAlarm.value = nA
 }
 
+function dismissAlarm() {
+  alarmTriggered.value = false
+  triggeredAlarm.value = null
+  if (alarmSnoozed.value) {
+    alarmSnoozed.value = false
+    snoozedAlarm.value.snooze_count = 0
+    snoozedAlarm.value = null
+  }
+}
+
+function snoozeAlarm() {
+  if (!alarmSnoozed.value) {
+    alarmSnoozed.value = true
+    snoozedAlarm.value = { ...triggeredAlarm.value }
+  }
+  alarmTriggered.value = false
+  triggeredAlarm.value = null
+  snoozedAlarm.value.snooze_count++
+}
+
 updateTime()
 getNextAlarm()
 
@@ -137,11 +195,17 @@ setInterval(getNextAlarm, 2000)
   </div>
   <div ref="alarmElement" class="absolute opacity-0 top-0 left-0 z-0"
     :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font};`">
-    Next Alarm:
-    <span v-if="nextAlarm">
-      {{ nextAlarm.displayStr }}
-    </span>
-    <span v-else>None Enabled</span>
+    <div v-if="alarmSnoozed">
+      Snoozed: {{ snoozedStr }}
+      <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+    </div>
+    <div v-else>
+      Next Alarm:
+      <span v-if="nextAlarm">
+        {{ nextAlarm.displayStr }}
+      </span>
+      <span v-else>None Enabled</span>
+    </div>
   </div>
   <div class="relative m-auto" :style="`width: ${model.width}px; height:${model.height}px;`">
     <div v-if="model.show_date && dateElement" class="absolute"
@@ -154,11 +218,36 @@ setInterval(getNextAlarm, 2000)
     </div>
     <div v-if="model.show_next_alarm && alarmElement" class="absolute"
       :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; left: ${model.alarm_x + clockCenterX - (alarmElement.clientWidth / 2)}px; bottom: ${model.alarm_y + clockCentery - (alarmElement.clientHeight / 2)}px;`">
-      Next Alarm:
-      <span v-if="nextAlarm">
-        {{ nextAlarm.displayStr }}
-      </span>
-      <span v-else>None Enabled</span>
+      <div v-if="alarmSnoozed">
+        Snoozed: {{ snoozedStr }}
+        <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+      </div>
+      <div v-else>
+        Next Alarm:
+        <span v-if="nextAlarm">
+          {{ nextAlarm.displayStr }}
+        </span>
+        <span v-else>None Enabled</span>
+      </div>
     </div>
   </div>
+  <audio ref="audioElement" class="hidden" controls loop>
+    <source src="/audio/alarm-clock-90867.mp3">
+  </audio>
+  <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()">
+    <template #header>
+      <div class="m-auto flex-grow">
+        Alarm Triggered!
+      </div>
+    </template>
+    <div class="flex flex-col w-full">
+      <div class="m-auto">
+        {{ triggeredAlarm.name }}
+      </div>
+      <div class="flex flex-row w-full min-w-fit justify-around">
+        <BasicButton @click="snoozeAlarm" type="warning" size="xl">Snooze</BasicButton>
+        <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+      </div>
+    </div>
+  </BasicModal>
 </template>

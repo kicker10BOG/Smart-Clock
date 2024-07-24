@@ -6,6 +6,7 @@ import SelectInput from '@/Components/SelectInput.vue'
 import Checkbox from '@/Components/Checkbox.vue'
 
 const model = defineModel()
+defineEmits(['update:model-value'])
 const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])
 </script>
 

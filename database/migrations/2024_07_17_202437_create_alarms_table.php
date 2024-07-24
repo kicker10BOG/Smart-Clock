@@ -26,9 +26,8 @@ return new class extends Migration
             $table->boolean('thursday')->default(true);
             $table->boolean('friday')->default(true);
             $table->boolean('saturday')->default(false);
-            $table->boolean('active')->default(true);
-            $table->unsignedTinyInteger('sleep_length')->default(10);
-            $table->unsignedTinyInteger('sleep_count')->default(0);
+            $table->unsignedTinyInteger('snooze_length')->default(10);
+            $table->unsignedTinyInteger('snooze_count')->default(0);
         });
     }
 

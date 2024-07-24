@@ -22,6 +22,9 @@ const props = defineProps({
   },
 })
 
+defineEmits(['update:model-value'])
+defineExpose({ focus: () => input.value.focus() })
+
 const div = ref(null)
 const input = ref(null)
 
@@ -52,8 +55,6 @@ onMounted(() => {
     div.value.removeAttribute('max')
   }
 })
-
-defineExpose({ focus: () => input.value.focus() })
 </script>
 
 <template>

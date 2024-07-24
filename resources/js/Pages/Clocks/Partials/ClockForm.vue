@@ -13,6 +13,8 @@ const props = defineProps({
   }
 })
 
+defineEmits(['update:model-value'])
+
 const useModel = model.value != undefined
 
 const form = useForm({

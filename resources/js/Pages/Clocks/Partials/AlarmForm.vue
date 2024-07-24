@@ -8,7 +8,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 
 const model = defineModel()
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'update:model-value'])
 
 const page = usePage()
 const clock = computed(() => page.props.clock)
@@ -21,7 +21,7 @@ const form = useForm({
     hour: model.value ? model.value.hour : 8,
     minute: model.value ? model.value.minute : 0,
   },
-  sleep_length: model.value ? model.value.sleep_length : 10,
+  snooze_length: model.value ? model.value.snooze_length : 10,
   enabled: model.value ? Boolean(model.value.enabled) : true,
   sunday: model.value ? Boolean(model.value.sunday) : false,
   monday: model.value ? Boolean(model.value.monday) : true,
@@ -56,7 +56,7 @@ const submitForm = () => {
         <TimeInput id="time" label="Time" v-model="form.time" :use_12hr="clock.use_12hr" class="flex-grow" />
       </div>
       <div class="flex flex-row w-72 justify-start">
-        <TextInput id="sleep_length" label="Sleep Length" v-model="form.sleep_length" type="number" step="1" min="1"
+        <TextInput id="snooze_length" label="Sleep Length" v-model="form.snooze_length" type="number" step="1" min="1"
           inputClass="w-16" />
       </div>
       <div class="flex flex-row w-72 justify-start">

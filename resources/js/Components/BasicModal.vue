@@ -1,9 +1,23 @@
 <script setup>
+import { watch } from 'vue';
+
 const model = defineModel({
   type: Boolean,
   default: false
 })
 
+const props = defineProps({
+  closeOnClickAway: {
+    type: Boolean, 
+    default: true,
+  },
+  showCloseX: {
+    type: Boolean, 
+    default: true,
+  },
+})
+
+const emit = defineEmits(['update:model-value', 'open', 'close'])
 
 const hasClass = (e, c) => {
   for (let i = 0; i < e.classList.length; i++) {
@@ -14,7 +28,15 @@ const hasClass = (e, c) => {
   return false
 }
 
-const closeModal = (e) => {
+watch(model, () => {
+  model.value ? emit('open') : emit('close')
+})
+
+function openModal(){
+  model.value = true
+}
+
+function closeModal(e) {
   if (!e || (e && hasClass(e.target, "close-modal-on-click"))) {
     model.value = false
   }
@@ -25,14 +47,14 @@ const closeModal = (e) => {
   <transition name="fade">
     <div v-if="model" tabindex="-1"
       class="close-modal-on-click overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 md:inset-0 h-modal h-full bg-black bg-opacity-30 dark:bg-opacity-60 flex justify-center items-center"
-      @click="closeModal($event)">
+      @click="closeOnClickAway ? closeModal($event) : null">
       <div class="relative p-4 m-auto w-full max-w-md lg:max-w-2xl h-auto z-50">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <!-- Modal header -->
-          <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+          <div v-if="$slots.header || showCloseX" class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
             <slot name="header" />
-            <button type="button"
+            <button v-if="showCloseX" type="button"
               class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               @click="closeModal()">
               <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
