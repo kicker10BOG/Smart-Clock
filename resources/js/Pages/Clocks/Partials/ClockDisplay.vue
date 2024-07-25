@@ -190,7 +190,7 @@ setInterval(getNextAlarm, 2000)
     {{ dateStr }}
   </div>
   <div ref="timeElement" class="absolute opacity-0 top-0 left-0 z-0"
-    :style="`font-size: ${model.clock_size}px; font-family: ${model.clock_font};`">
+    :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font};`">
     {{ timeStr }}
   </div>
   <div ref="alarmElement" class="absolute opacity-0 top-0 left-0 z-0"
@@ -213,7 +213,7 @@ setInterval(getNextAlarm, 2000)
       {{ dateStr }}
     </div>
     <div v-if="timeElement" class="absolute"
-      :style="`font-size: ${model.clock_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
+      :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
       {{ timeStr }}
     </div>
     <div v-if="model.show_next_alarm && alarmElement" class="absolute"

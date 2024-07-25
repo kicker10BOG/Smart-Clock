@@ -24,7 +24,7 @@ const form = useForm({
   clock_y: 0,
   alarm_y: -215,
   date_size: 100,
-  clock_size: 310,
+  time_size: 300,
   alarm_size: 80,
   date_font: 'sans-serif',
   clock_font: 'math',

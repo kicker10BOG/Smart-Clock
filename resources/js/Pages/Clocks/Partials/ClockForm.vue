@@ -36,7 +36,7 @@ const form = useForm({
   clock_y: 0,
   alarm_y: -215,
   date_size: 100,
-  clock_size: 310,
+  time_size: 300,
   alarm_size: 80,
   date_font: 'sans-serif',
   clock_font: 'math',
@@ -69,7 +69,7 @@ if (useModel) {
   form.clock_y = computed(() => model.value.clock_y)
   form.alarm_y = computed(() => model.value.alarm_y)
   form.date_size = computed(() => model.value.date_size)
-  form.clock_size = computed(() => model.value.clock_size)
+  form.time_size = computed(() => model.value.time_size)
   form.alarm_size = computed(() => model.value.alarm_size)
   form.date_font = computed(() => model.value.date_font)
   form.clock_font = computed(() => model.value.clock_font)
@@ -95,7 +95,7 @@ else {
   model.value.clock_y = computed(() => form.clock_y)
   model.value.alarm_y = computed(() => form.alarm_y)
   model.value.date_size = computed(() => form.date_size)
-  model.value.clock_size = computed(() => form.clock_size)
+  model.value.time_size = computed(() => form.time_size)
   model.value.alarm_size = computed(() => form.alarm_size)
   model.value.date_font = computed(() => form.date_font)
   model.value.clock_font = computed(() => form.clock_font)

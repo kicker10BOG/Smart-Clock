@@ -147,7 +147,7 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
             inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <TextInput id="clock_size" label="Time Font Size (px)" v-model="model.clock_size" type="number" step="1"
+          <TextInput id="time_size" label="Time Font Size (px)" v-model="model.time_size" type="number" step="1"
             min="1" inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
