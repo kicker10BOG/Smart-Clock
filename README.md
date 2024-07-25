@@ -48,6 +48,10 @@ cp .env.example .env
 ``` 
 Inside your `.env` file, I suggest changing the settings for `DB_USERNAME` and `DB_PASSWORD` to something different. 
 
+Next, generate the encryption key. 
+```
+sail artisan key:generate
+```
 Now you need to run the following command to compile the PHP packages. You may need to setup composer if you've never used it before. 
 ```
 composer install
