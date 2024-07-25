@@ -25,7 +25,7 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
             inputClass="w-24" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
-          <TextInput id="width" label="Height (px)" v-model="model.height" type="number" step="1" min="1"
+          <TextInput id="height" label="Height (px)" v-model="model.height" type="number" step="1" min="1"
             inputClass="w-24" />
         </div>
       </div>

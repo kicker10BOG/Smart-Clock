@@ -1,19 +1,17 @@
 <?php
 
-use App\Http\Controllers\AlarmController;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\ClockController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\AlarmController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClockController;
 
 Route::get('/', [MainController::class, 'home'])->name('home');
 Route::put('/flash', [MainController::class, 'addFlash'])->name('addFlash');
 Route::delete('/flash', [MainController::class, 'removeFlash'])->name('removeFlash');
 
 Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
+    'auth',
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
@@ -22,8 +20,7 @@ Route::middleware([
 Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->group(function () {
     Route::get('/{clock}', 'show')->whereNumber('clock')->name('show');
     Route::middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
+        'auth',
         'verified',
     ])->group(function () {
         Route::get('/new', 'create')->name('create');
@@ -35,8 +32,7 @@ Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->gro
 
 Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->group(function () {
     Route::middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
+        'auth',
         'verified',
     ])->group(function () {
         Route::post('/new', 'store')->name('store');
@@ -48,3 +44,5 @@ Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->gro
         Route::put('/{alarm}/{day}/disable', 'disableDay')->whereNumber('alarm')->name('disableDay');
     });
 });
+
+require __DIR__.'/auth.php';

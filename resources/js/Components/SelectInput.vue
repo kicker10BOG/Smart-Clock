@@ -52,7 +52,7 @@ defineExpose({ focus: () => input.value.focus() });
       <label :for="id" class="m-1 font-medium">{{ label }}</label>
     </div>
     <div class="m-auto">
-      <select ref="input"
+      <select ref="input" :id="id"
         class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm min-w-fit"
         v-model="model">
         <slot />

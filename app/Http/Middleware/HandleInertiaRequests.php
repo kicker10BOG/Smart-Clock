@@ -40,8 +40,12 @@ class HandleInertiaRequests extends Middleware
             $fMessages = (array)$fMessages;
         }
         // dd($fMessages);
-        return array_merge(parent::share($request), [
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user(),
+            ],
             'flash' => array_values($fMessages),
-        ]);
+        ];
     }
 }
