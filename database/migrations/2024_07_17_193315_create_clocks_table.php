@@ -33,7 +33,7 @@ return new class extends Migration
             $table->smallInteger('clock_y')->default(0);
             $table->smallInteger('alarm_y')->default(-215);
             $table->unsignedSmallInteger('date_size')->default(100);
-            $table->unsignedSmallInteger('clock_size')->default(310);
+            $table->unsignedSmallInteger('time_size')->default(300);
             $table->unsignedSmallInteger('alarm_size')->default(80);
             $table->enum('date_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('sans-serif');
             $table->enum('clock_font', ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'math'])->default('math');
