@@ -7,7 +7,7 @@ import Icon from '@/Components/Icon.vue'
 import Toggle from '@/Components/Toggle.vue'
 import NavLink from '@/Components/Nav/NavLink.vue'
 import SlideTransition from "@/Components/SlideTransition.vue";
-import VDropdown from '@/Components/VDropdown.vue'
+import Dropdown from '@/Components/Dropdown.vue'
 import BasicButton from '@/Components/BasicButton.vue'
 
 import darkMode from '@/Stores/darkMode.js'
@@ -57,7 +57,7 @@ const closeMenu = () => {
       <div class="flex flex-shrink flex-col justify-around">
         <div class="flex flex-shrink flex-row justify-around">
           <div class="mx-1 my-auto">
-            <VDropdown v-model="isOpen">
+            <Dropdown v-model="isOpen">
               <template #button>
                 <Icon icon="menu" size="md" extraClass="cursor-pointer" />
               </template>
@@ -84,7 +84,7 @@ const closeMenu = () => {
                   <NavLink href="/register">Register</NavLink>
                 </template>
               </div>
-            </VDropdown>
+            </Dropdown>
           </div>
           <!-- <div class="my-auto ml-2 mr-1 cursor-pointer rotate-180" @click="showNav = !showNav">
           <Icon icon="arrow" size="sm" />

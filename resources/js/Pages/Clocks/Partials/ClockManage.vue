@@ -1,6 +1,6 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
-import VDropdown from '@/Components/VDropdown.vue'
+import Dropdown from '@/Components/Dropdown.vue'
 import SlideTransition from '@/Components/SlideTransition.vue'
 import BasicButton from '@/Components/BasicButton.vue'
 import BasicPanel from '@/Components/BasicPanel.vue'
@@ -20,7 +20,7 @@ const deleteClock = () => {
 <template>
   <SlideTransition direction="up">
     <div v-if="showNav" class="fixed right-0 bottom-0">
-      <VDropdown direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
+      <Dropdown direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
         :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
         <template #button>
           <div class="fixed bottom-10 right-2">
@@ -47,7 +47,7 @@ const deleteClock = () => {
             </div>
           </BasicPanel>
         </div>
-      </VDropdown>
+      </Dropdown>
     </div>
   </SlideTransition>
 </template>

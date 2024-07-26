@@ -10,19 +10,13 @@ Route::get('/', [MainController::class, 'home'])->name('home');
 Route::put('/flash', [MainController::class, 'addFlash'])->name('addFlash');
 Route::delete('/flash', [MainController::class, 'removeFlash'])->name('removeFlash');
 
-Route::middleware([
-    'auth',
-    'verified',
-])->group(function () {
+Route::middleware(['auth',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
 });
 
 Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->group(function () {
     Route::get('/{clock}', 'show')->whereNumber('clock')->name('show');
-    Route::middleware([
-        'auth',
-        'verified',
-    ])->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::get('/new', 'create')->name('create');
         Route::post('/new', 'store')->name('store');
         Route::put('/{clock}', 'update')->whereNumber('clock')->name('update');
@@ -31,10 +25,7 @@ Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->gro
 });
 
 Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->group(function () {
-    Route::middleware([
-        'auth',
-        'verified',
-    ])->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::post('/new', 'store')->name('store');
         Route::put('/{alarm}', 'update')->whereNumber('alarm')->name('update');
         Route::delete('/{alarm}', 'destroy')->whereNumber('alarm')->name('destroy');

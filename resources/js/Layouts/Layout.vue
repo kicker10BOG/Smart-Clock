@@ -1,6 +1,6 @@
 <script setup>
 import NavBar from '@/Components/Nav/NavBar.vue'
-import Footer from '@/Components/Footer.vue'
+import Footer from '@/Layouts/Footer.vue'
 import Icon from '@/Components/Icon.vue'
 import FlashSection from '@/Components/FlashSection.vue'
 import darkMode from '@/Stores/darkMode.js'
@@ -8,7 +8,7 @@ import darkMode from '@/Stores/darkMode.js'
 
 <template>
   <div class="w-full" :class="darkMode ? 'dark' : ''">
-    <div class="flex flex-col bg-white dark:bg-black text-black dark:text-white" style="min-height: 100vh;">
+    <div class="flex flex-col bg-0 text-black dark:text-white" style="min-height: 100vh;">
       <NavBar sitename="Smart Clock">
         <template #brand>
           <Icon icon="clock" />Smart Clock

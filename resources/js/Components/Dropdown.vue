@@ -1,79 +1,108 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue'
+import SlideTransition from "@/Components/SlideTransition.vue";
+
+const model = defineModel({ default: false })
 
 const props = defineProps({
-    align: {
-        type: String,
-        default: 'right',
-    },
-    width: {
-        type: String,
-        default: '48',
-    },
-    contentClasses: {
-        type: Array,
-        default: () => ['py-1', 'bg-white dark:bg-gray-700'],
-    },
-});
+  placement: {
+    type: String,
+    default: "right",
+    validator: (value) => ["right", "left"].indexOf(value) !== -1,
+  },
+  vertPlacement: {
+    type: String,
+    default: "below",
+    validator: (value) => ["above", "below"].indexOf(value) !== -1,
+  },
+  direction: {
+    type: String,
+    default: "down",
+    validator: (value) => ["up", "down", "right", "left"].indexOf(value) !== -1,
+  },
+  subHeight: {
+    default: 55,
+  },
+  opacity: {
+    type: Number,
+    default: 1,
+  },
+  clickAwayToClose: {
+    type: Boolean,
+    default: true,
+  },
+  makeFixed: {
+    type: Boolean,
+    default: false,
+  },
+  fixedTop: {
+    default: null,
+  },
+  fixedBottom: {
+    default: null,
+  },
+  fixedLeft: {
+    default: null,
+  },
+  fixedRight: {
+    default: null,
+  },
+})
 
-let open = ref(false);
+const height = ref(200)
+const handleResize = () => {
+  height.value = window.innerHeight - props.subHeight;
+}
 
-const closeOnEscape = (e) => {
-    if (open.value && e.key === 'Escape') {
-        open.value = false;
+const classes = ref('')
+const styles = ref('')
+onMounted(() => {
+  const onEscape = (e) => {
+    if (e.key === "Esc" || e.key === "Escape") {
+      model.value = false;
     }
-};
+  };
+  document.addEventListener("keydown", onEscape);
+  window.addEventListener("resize", handleResize);
+  handleResize();
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-onUnmounted(() => document.removeEventListener('keydown', closeOnEscape));
-
-const widthClass = computed(() => {
-    return {
-        '48': 'w-48',
-    }[props.width.toString()];
-});
-
-const alignmentClasses = computed(() => {
-    if (props.align === 'left') {
-        return 'ltr:origin-top-left rtl:origin-top-right start-0';
-    }
-
-    if (props.align === 'right') {
-        return 'ltr:origin-top-right rtl:origin-top-left end-0';
-    }
-
-    return 'origin-top';
-});
+  if (props.makeFixed) {
+    classes.value = "fixed"
+    styles.value += props.fixedTop !== null ? `top: ${props.fixedTop}px; ` : ''
+    styles.value += props.fixedBottom !== null ? `bottom: ${props.fixedBottom}px; ` : ''
+    styles.value += props.fixedLeft !== null ? `left: ${props.fixedLeft}px; ` : ''
+    styles.value += props.fixedRight !== null ? `right: ${props.fixedRight}px; ` : ''
+  }
+  else {
+    classes.value = "absolute"
+    classes.value += props.placement == 'right' ? ' right-0' : ' left-0'
+    classes.value += props.vertPlacement == 'bottom' ? ' bottom-12' : ''
+  }
+})
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+})
 </script>
 
 <template>
-    <div class="relative">
-        <div @click="open = ! open">
-            <slot name="trigger" />
-        </div>
+  <div class="relative">
+    <!-- <div class="flex" :class="{'flex-col': vertPlacement == 'bottom', 'flex-col-reverse': vertPlacement == 'top'}"> -->
+    <button class="z-10 relative flex items-center focus:outline-none select-none" @click="model = !model">
+      <slot name="button" />
+    </button>
 
-        <!-- Full Screen Dropdown Overlay -->
-        <div v-show="open" class="fixed inset-0 z-40" @click="open = false" />
+    <!-- to close when clicked on space around it-->
+    <button class="fixed inset-0 h-full w-full cursor-default focus:outline-none" v-if="model && clickAwayToClose"
+      @click="model = false" tabindex="-1"></button>
 
-        <transition
-            enter-active-class="transition ease-out duration-200"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-        >
-            <div
-                v-show="open"
-                class="absolute z-50 mt-2 rounded-md shadow-lg"
-                :class="[widthClass, alignmentClasses]"
-                style="display: none;"
-                @click="open = false"
-            >
-                <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
-                    <slot name="content" />
-                </div>
-            </div>
-        </transition>
-    </div>
+    <!--dropdown menu-->
+    <slide-transition :direction="direction">
+      <div :class="classes"
+        class="shadow-lg border min-w-[150px] rounded py-1 px-2 text-sm mt-2 bg-gray-100 z-50 dark:bg-gray-900 dark:border-gray-600 overflow-y-auto"
+        :style="`opacity: ${opacity}; max-height: ${height}px; ${styles}`" v-if="model">
+        <slot />
+      </div>
+    </slide-transition>
+    <!-- </div> -->
+  </div>
 </template>
