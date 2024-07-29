@@ -185,39 +185,17 @@ setInterval(getNextAlarm, 2000)
 </script>
 
 <template>
-  <div ref="dateElement" class="absolute opacity-0 top-0 left-0 z-0"
-    :style="`font-size: ${model.date_size}px; font-family: ${model.date_font};`">
-    {{ dateStr }}
-  </div>
-  <div ref="timeElement" class="absolute opacity-0 top-0 left-0 z-0"
-    :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font};`">
-    {{ timeStr }}
-  </div>
-  <div ref="alarmElement" class="absolute opacity-0 top-0 left-0 z-0"
-    :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font};`">
-    <div v-if="alarmSnoozed">
-      Snoozed: {{ snoozedStr }}
-      <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
-    </div>
-    <div v-else>
-      Next Alarm:
-      <span v-if="nextAlarm">
-        {{ nextAlarm.displayStr }}
-      </span>
-      <span v-else>None Enabled</span>
-    </div>
-  </div>
-  <div class="relative m-auto" :style="`width: ${model.width}px; height:${model.height}px;`">
-    <div v-if="model.show_date && dateElement" class="absolute"
-      :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; left: ${model.date_x + clockCenterX - (dateElement.clientWidth / 2)}px; bottom: ${model.date_y + clockCentery - (dateElement.clientHeight / 2)}px;`">
+  <div class="flex flex-col flex-grow w-full">
+    <div ref="dateElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
+      :style="`font-size: ${model.date_size}px; font-family: ${model.date_font};`">
       {{ dateStr }}
     </div>
-    <div v-if="timeElement" class="absolute"
-      :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
+    <div ref="timeElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
+      :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font};`">
       {{ timeStr }}
     </div>
-    <div v-if="model.show_next_alarm && alarmElement" class="absolute"
-      :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; left: ${model.alarm_x + clockCenterX - (alarmElement.clientWidth / 2)}px; bottom: ${model.alarm_y + clockCentery - (alarmElement.clientHeight / 2)}px;`">
+    <div ref="alarmElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
+      :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font};`">
       <div v-if="alarmSnoozed">
         Snoozed: {{ snoozedStr }}
         <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
@@ -230,24 +208,48 @@ setInterval(getNextAlarm, 2000)
         <span v-else>None Enabled</span>
       </div>
     </div>
-  </div>
-  <audio ref="audioElement" class="hidden" controls loop>
-    <source src="/audio/alarm-clock-90867.mp3">
-  </audio>
-  <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()">
-    <template #header>
-      <div class="m-auto flex-grow">
-        Alarm Triggered!
+    <div class="relative m-auto overflow-hidden" :style="`width: ${model.width}px; height:${model.height}px;`">
+      <div v-if="model.show_date && dateElement" class="absolute whitespace-nowrap"
+        :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; left: ${model.date_x + clockCenterX - (dateElement.clientWidth / 2)}px; bottom: ${model.date_y + clockCentery - (dateElement.clientHeight / 2)}px;`">
+        {{ dateStr }}
       </div>
-    </template>
-    <div class="flex flex-col w-full">
-      <div class="m-auto">
-        {{ triggeredAlarm.name }}
+      <div v-if="timeElement" class="absolute whitespace-nowrap"
+        :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
+        {{ timeStr }}
       </div>
-      <div class="flex flex-row w-full min-w-fit justify-around">
-        <BasicButton @click="snoozeAlarm" type="warning" size="xl">Snooze</BasicButton>
-        <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+      <div v-if="model.show_next_alarm && alarmElement" class="absolute whitespace-nowrap"
+        :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; left: ${model.alarm_x + clockCenterX - (alarmElement.clientWidth / 2)}px; bottom: ${model.alarm_y + clockCentery - (alarmElement.clientHeight / 2)}px;`">
+        <div v-if="alarmSnoozed">
+          Snoozed: {{ snoozedStr }}
+          <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+        </div>
+        <div v-else>
+          Next Alarm:
+          <span v-if="nextAlarm">
+            {{ nextAlarm.displayStr }}
+          </span>
+          <span v-else>None Enabled</span>
+        </div>
       </div>
     </div>
-  </BasicModal>
+    <audio ref="audioElement" class="hidden" controls loop>
+      <source src="/audio/alarm-clock-90867.mp3">
+    </audio>
+    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()">
+      <template #header>
+        <div class="m-auto flex-grow">
+          Alarm Triggered!
+        </div>
+      </template>
+      <div class="flex flex-col w-full">
+        <div class="m-auto">
+          {{ triggeredAlarm.name }}
+        </div>
+        <div class="flex flex-row w-full min-w-fit justify-around">
+          <BasicButton @click="snoozeAlarm" type="warning" size="xl">Snooze</BasicButton>
+          <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
+        </div>
+      </div>
+    </BasicModal>
+  </div>
 </template>
