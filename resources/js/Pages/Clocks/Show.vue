@@ -40,17 +40,24 @@ document.onmousedown = function () {
 };
 
 onMounted(() => {
-  reloadInterval.value = setInterval(() => {
-    if (reloadOk.value) {
-      router.reload({
-        only: ['clock',],
-      })
-    }
-  }, 60000)
+  // console.log(window.Echo);
+  window.Echo.channel(`clock.${clock.value.id}`)
+    .listen('ClockUpdated', (e) => {
+      // console.log(e)
+      page.props.clock = e.clock
+    })
+  // reloadInterval.value = setInterval(() => {
+  //   if (reloadOk.value) {
+  //     router.reload({
+  //       only: ['clock',],
+  //     })
+  //   }
+  // }, 60000)
 })
 
 onUnmounted(() => {
-  clearInterval(reloadInterval.value)
+  // clearInterval(reloadInterval.value)
+  window.Echo.leaveChannel(`clock.${clock.value.id}`)
 })
 </script>
 

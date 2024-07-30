@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ClockUpdated;
 use App\Models\Clock;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -114,6 +115,7 @@ class ClockController extends Controller
         $clock->update($validateAttributes);
 
         flash('Clock Updated');
+        broadcast(new ClockUpdated($clock));
         return to_route('clocks.show', ['clock' => $clock]);
     }
 
