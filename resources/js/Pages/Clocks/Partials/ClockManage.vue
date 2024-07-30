@@ -8,9 +8,20 @@ import Icon from '@/Components/Icon.vue'
 import ClockForm from './ClockForm.vue'
 import ClockAlarms from './ClockAlarms.vue'
 import showNav from '@/Stores/showNav.js'
+import { ref, watch } from 'vue'
 
 const model = defineModel()
-defineEmits(['update:model-value'])
+const emit = defineEmits(['update:model-value', 'opened', 'closed'])
+
+const opened = ref(false)
+watch(opened, (val) => {
+  if (val) {
+    emit('opened')
+  }
+  else {
+    emit('closed')
+  }
+})
 
 const deleteClock = () => {
   router.delete(route('clocks.destroy', { 'clock': model.value.id }))
@@ -20,7 +31,7 @@ const deleteClock = () => {
 <template>
   <SlideTransition direction="up">
     <div v-if="showNav" class="fixed right-0 bottom-0">
-      <Dropdown direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
+      <Dropdown v-model="opened" direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
         :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
         <template #button>
           <div class="fixed bottom-10 right-2">
