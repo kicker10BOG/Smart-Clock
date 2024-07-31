@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
 import ClockDisplay from './Partials/ClockDisplay.vue';
 import ClockManage from './Partials/ClockManage.vue';
 
@@ -14,8 +14,6 @@ const props = defineProps({
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 const clock = computed(() => page.props.clock)
-const reloadOk = ref(true)
-const reloadInterval = ref(null)
 
 let timeout = null
 const wakeTime = 3000
@@ -40,23 +38,32 @@ document.onmousedown = function () {
 };
 
 onMounted(() => {
-  // console.log(window.Echo);
   window.Echo.channel(`clock.${clock.value.id}`)
     .listen('ClockUpdated', (e) => {
-      // console.log(e)
       page.props.clock = e.clock
     })
-  // reloadInterval.value = setInterval(() => {
-  //   if (reloadOk.value) {
-  //     router.reload({
-  //       only: ['clock',],
-  //     })
-  //   }
-  // }, 60000)
+    .listen('AlarmUpdated', (e) => {
+      for (let i = 0; i < page.props.clock.alarms.length; i++) {
+        if (page.props.clock.alarms[i].id == e.alarm.id) {
+          page.props.clock.alarms[i] = e.alarm
+          break
+        }
+      }
+    })
+    .listen('AlarmCreated', (e) => {
+      page.props.clock.alarms.push(e.alarm)
+    })
+    .listen('AlarmDeleted', (e) => {
+      for (let i = 0; i < page.props.clock.alarms.length; i++) {
+        if (page.props.clock.alarms[i].id == e.alarm_id) {
+          page.props.clock.alarms.splice(i, 1)
+          break
+        }
+      }
+    })
 })
 
 onUnmounted(() => {
-  // clearInterval(reloadInterval.value)
   window.Echo.leaveChannel(`clock.${clock.value.id}`)
 })
 </script>
@@ -65,7 +72,7 @@ onUnmounted(() => {
   <div class="flex flex-grow flex-col w-full justify-around">
     <ClockDisplay v-model="clock" />
     <div v-if="user && clock.user_id == user.id" class="relative">
-      <ClockManage v-model="clock" @opened="reloadOk = false" @closed="reloadOk = true"/>
+      <ClockManage v-model="clock"/>
     </div>
   </div>
 </template>
