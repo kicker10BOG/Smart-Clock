@@ -67,7 +67,6 @@ class Flash {
 
   remove() {
     for (let i = 0; i < page.props.flash.length; i++) {
-      console.log(i, page.props.flash[i].id)
       if (page.props.flash[i].id == this.id) {
         page.props.flash.splice(i, 1)
         break
