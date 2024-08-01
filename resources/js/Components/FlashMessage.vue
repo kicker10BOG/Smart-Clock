@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { removeFlashMsg } from '@/Stores/flashMessages.js'
+import { flash } from '@/Stores/flashMessages.js'
 import Icon from './Icon.vue';
 
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const visible = ref(true)
+const visible = ref(false)
 const typeClass = ref("");
 switch (props.message.type) {
   case "info":
@@ -29,14 +29,19 @@ switch (props.message.type) {
     break;
 }
 
-const deleteMsg = () => {
+function delMsg() {
+  flash(props.message).remove()
+}
+
+function deleteMsg() {
   visible.value = false
-  setTimeout(removeFlashMsg(props.message), 10000)
+  setTimeout(delMsg, 400)
 }
 
 onMounted(() => {
+  setTimeout(() => visible.value = true, 100)
   if (props.message.delay > 0 && !props.message.important) {
-    setTimeout(deleteMsg, props.message.delay * 1000)
+    setTimeout(deleteMsg, props.message.delay * 1000 + 100)
   }
 })
 </script>

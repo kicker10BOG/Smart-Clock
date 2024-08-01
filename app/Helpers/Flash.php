@@ -15,8 +15,8 @@ class Flash {
         $this->message = $msg;
     }
 
-    public function error() {
-        $this->type = "error";
+    public function success() {
+        $this->type = "success";
         return $this;
     }
 
@@ -25,8 +25,8 @@ class Flash {
         return $this;
     }
 
-    public function success() {
-        $this->type = "success";
+    public function error() {
+        $this->type = "error";
         return $this;
     }
 
@@ -37,6 +37,11 @@ class Flash {
 
     public function important() {
         $this->important = True;
+        return $this;
+    }
+
+    public function delay($val) {
+        $this->delay = $val;
         return $this;
     }
 

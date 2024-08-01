@@ -12,15 +12,98 @@ function generateRandomString(length) {
 }
 
 const page = usePage()
-const addFlashMsg = (msg) => {
-  msg.id = generateRandomString(16)
-  page.props.flash.push(msg)
-  axios.put(route('addFlash', {flash: msg}))
-}
-const removeFlashMsg = (msg) => {
-  const i = page.props.flash.indexOf(msg)
-  page.props.flash.splice(i, 1)
-  axios.delete(route('removeFlash', {flash: msg}))
+
+class Flash {
+  constructor(msg) {
+    this.id = generateRandomString(16)
+    this.title = ''
+    this.message = msg
+    this.closable = true
+    this.delay = 5
+    this.type = 'success'
+    this.important = false
+  }
+
+  setSuccess() {
+    this.type = 'success'
+    return this
+  }
+  
+  setWarning() {
+    this.type = 'warning'
+    return this
+  }
+
+  setError() {
+    this.type = 'error'
+    return this
+  }
+
+  setInfo() {
+    this.type = 'info'
+    return this
+  }
+
+  setImportant(val = true) {
+    this.important = val
+    return this
+  }
+
+  setDelay(val = 5) {
+    this.delay = val
+    return this
+  }
+
+  setTitle(val = '') {
+    this.title = val
+    return this
+  }
+
+  add() {
+    console.log('flash add')
+    console.log(page.props.flash)
+    console.log(this)
+    page.props.flash.push(this)
+    axios.put(route('addFlash', {flash: this})).then(() => {
+      console.log(page.props.flash)
+    })
+    return this
+  }
+
+  remove() {
+    console.log('flash remove')
+    console.log(page.props.flash)
+    console.log(page.props.flash.length)
+    console.log(page.props.flash[0])
+    console.log(page.props.flash[0].id)
+    console.log(this)
+    console.log(this.id)
+    for (let i = 0; i < page.props.flash.length; i++) {
+      console.log(i, page.props.flash[i].id)
+      if (page.props.flash[i].id == this.id) {
+        page.props.flash.splice(i, 1)
+        break
+      }
+    }
+    axios.delete(route('removeFlash', {flash: this})).then(() => {
+      console.log(page.props.flash)
+    })
+  }
 }
 
-export { addFlashMsg, removeFlashMsg }
+function flash(msg) {
+  if (typeof msg == 'string' || msg instanceof String) {
+    let f = new Flash(msg)
+    return f
+  }
+  let f = new Flash(msg.message)
+  f.id = msg.id
+  f.title = msg.title
+  f.closable = msg.closable
+  f.delay = msg.delay
+  f.type = msg.type
+  f.important = msg.important
+  return f
+}
+
+export { flash }
