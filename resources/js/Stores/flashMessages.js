@@ -60,24 +60,12 @@ class Flash {
   }
 
   add() {
-    console.log('flash add')
-    console.log(page.props.flash)
-    console.log(this)
     page.props.flash.push(this)
-    axios.put(route('addFlash', {flash: this})).then(() => {
-      console.log(page.props.flash)
-    })
+    axios.put(route('addFlash', {flash: this}))
     return this
   }
 
   remove() {
-    console.log('flash remove')
-    console.log(page.props.flash)
-    console.log(page.props.flash.length)
-    console.log(page.props.flash[0])
-    console.log(page.props.flash[0].id)
-    console.log(this)
-    console.log(this.id)
     for (let i = 0; i < page.props.flash.length; i++) {
       console.log(i, page.props.flash[i].id)
       if (page.props.flash[i].id == this.id) {
@@ -85,9 +73,7 @@ class Flash {
         break
       }
     }
-    axios.delete(route('removeFlash', {flash: this})).then(() => {
-      console.log(page.props.flash)
-    })
+    axios.delete(route('removeFlash', {flash: this}))
   }
 }
 
