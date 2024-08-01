@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\AlarmCreated;
 use App\Events\AlarmDeleted;
-use App\Events\ClockUpdated;
+use App\Events\AlarmDismissed;
+use App\Events\AlarmSnoozed;
 use App\Events\AlarmUpdated;
 use App\Models\Alarm;
 use App\Models\Clock;
@@ -40,7 +41,6 @@ class AlarmController extends Controller
         $validateAttributes['clock_id'] = $clock->id;
         $alarm = Alarm::create($validateAttributes);
         
-        flash('Alarm Created');
         broadcast(new AlarmCreated($alarm));
         return to_route('clocks.show', ['clock' => $clock]);
     }
@@ -70,7 +70,6 @@ class AlarmController extends Controller
         $validateAttributes['saturday'] = $request->input('saturday');
         $alarm->update($validateAttributes);
         
-        flash('Alarm Updated');
         broadcast(new AlarmUpdated($alarm));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
@@ -86,7 +85,6 @@ class AlarmController extends Controller
         $alarm->enabled = true;
         $alarm->save();
         
-        flash('Alarm Enabled');
         broadcast(new AlarmUpdated($alarm));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
@@ -102,7 +100,6 @@ class AlarmController extends Controller
         $alarm->enabled = false;
         $alarm->save();
         
-        flash('Alarm Disabled');
         broadcast(new AlarmUpdated($alarm));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
@@ -119,7 +116,6 @@ class AlarmController extends Controller
         $id = $alarm->id;
         $alarm->delete();
         
-        flash('Alarm Deleted');
         broadcast(new AlarmDeleted($id, $clock));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
@@ -137,7 +133,6 @@ class AlarmController extends Controller
         $alarm->save();
         $day = ucfirst($day);
         
-        flash("Alarm Enabled for {$day}");
         broadcast(new AlarmUpdated($alarm));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
@@ -155,8 +150,23 @@ class AlarmController extends Controller
         $alarm->save();
         $day = ucfirst($day);
 
-        flash("Alarm Disabled for {$day}");
         broadcast(new AlarmUpdated($alarm));
         return to_route('clocks.show', ['clock' => $alarm->clock]);
+    }
+
+    /**
+     * Snooze an alarm
+     */
+    public function snooze(Request $request, Alarm $alarm, int $count) {
+        broadcast(new AlarmSnoozed($alarm, $count));
+        return 'snoozed';
+    }
+
+    /**
+     * Dismiss an alarm
+     */
+    public function dismiss(Request $request, Alarm $alarm) {
+        broadcast(new AlarmDismissed($alarm));
+        return 'dismissed';
     }
 }

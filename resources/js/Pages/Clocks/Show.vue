@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import ClockDisplay from './Partials/ClockDisplay.vue';
 import ClockManage from './Partials/ClockManage.vue';
@@ -36,36 +36,6 @@ document.onmousedown = function () {
   showMouseCursor();
   timeout = setTimeout(hideMouseCursor, wakeTime);
 };
-
-onMounted(() => {
-  window.Echo.channel(`clock.${clock.value.id}`)
-    .listen('ClockUpdated', (e) => {
-      page.props.clock = e.clock
-    })
-    .listen('AlarmUpdated', (e) => {
-      for (let i = 0; i < page.props.clock.alarms.length; i++) {
-        if (page.props.clock.alarms[i].id == e.alarm.id) {
-          page.props.clock.alarms[i] = e.alarm
-          break
-        }
-      }
-    })
-    .listen('AlarmCreated', (e) => {
-      page.props.clock.alarms.push(e.alarm)
-    })
-    .listen('AlarmDeleted', (e) => {
-      for (let i = 0; i < page.props.clock.alarms.length; i++) {
-        if (page.props.clock.alarms[i].id == e.alarm_id) {
-          page.props.clock.alarms.splice(i, 1)
-          break
-        }
-      }
-    })
-})
-
-onUnmounted(() => {
-  window.Echo.leaveChannel(`clock.${clock.value.id}`)
-})
 </script>
 
 <template>

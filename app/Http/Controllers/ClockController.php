@@ -114,7 +114,7 @@ class ClockController extends Controller
 
         $clock->update($validateAttributes);
 
-        flash('Clock Updated');
+        // flash('Clock Updated');
         broadcast(new ClockUpdated($clock));
         return to_route('clocks.show', ['clock' => $clock]);
     }

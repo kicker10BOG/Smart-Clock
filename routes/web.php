@@ -33,6 +33,8 @@ Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->gro
         Route::put('/{alarm}/disable', 'disable')->whereNumber('alarm')->name('disable');
         Route::put('/{alarm}/{day}/enable', 'enableDay')->whereNumber('alarm')->name('enableDay');
         Route::put('/{alarm}/{day}/disable', 'disableDay')->whereNumber('alarm')->name('disableDay');
+        Route::post('/{alarm}/dismiss', 'dismiss')->whereNumber('alarm')->name('dismiss');
+        Route::post('/{alarm}/snooze/{count}', 'snooze')->whereNumber('alarm')->name('snooze');
     });
 });
 

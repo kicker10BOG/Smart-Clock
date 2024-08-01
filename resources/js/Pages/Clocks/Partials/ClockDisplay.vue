@@ -1,9 +1,14 @@
 <script setup>
-import { ref, computed } from 'vue'
+import axios from "axios";
+import { ref, computed, onUnmounted, onMounted } from 'vue'
 import BasicModal from '@/Components/BasicModal.vue'
 import BasicButton from '@/Components/BasicButton.vue';
+import { usePage } from '@inertiajs/vue3';
+import { flash } from "@/Stores/flashMessages";
 
 const model = defineModel()
+const page = usePage()
+const clock = computed(() => page.props.clock)
 defineEmits(['update:model-value'])
 
 const dateStr = ref('')
@@ -157,8 +162,12 @@ function getNextAlarm() {
   nextAlarm.value = nA
 }
 
-function dismissAlarm() {
+function dismissAlarm(broadcast = true) {
   alarmTriggered.value = false
+  if (broadcast) {
+    let alarm = triggeredAlarm.value && triggeredAlarm.value.id ? triggeredAlarm.value : snoozedAlarm.value
+    axios.post(route('alarms.dismiss', { 'alarm': alarm }))
+  }
   triggeredAlarm.value = null
   if (alarmSnoozed.value) {
     alarmSnoozed.value = false
@@ -175,6 +184,7 @@ function snoozeAlarm() {
   alarmTriggered.value = false
   triggeredAlarm.value = null
   snoozedAlarm.value.snooze_count++
+  axios.post(route('alarms.snooze', { 'alarm': snoozedAlarm.value, 'count': snoozedAlarm.value.snooze_count }))
 }
 
 updateTime()
@@ -182,6 +192,49 @@ getNextAlarm()
 
 setInterval(updateTime, 1000)
 setInterval(getNextAlarm, 2000)
+
+onMounted(() => {
+  window.Echo.channel(`clock.${clock.value.id}`)
+    .listen('ClockUpdated', (e) => {
+      flash("Clock Updated").add()
+      page.props.clock = e.clock
+    })
+    .listen('AlarmUpdated', (e) => {
+      for (let i = 0; i < page.props.clock.alarms.length; i++) {
+        if (page.props.clock.alarms[i].id == e.alarm.id) {
+          page.props.clock.alarms[i] = e.alarm
+          break
+        }
+      }
+    })
+    .listen('AlarmCreated', (e) => {
+      page.props.clock.alarms.push(e.alarm)
+    })
+    .listen('AlarmDeleted', (e) => {
+      for (let i = 0; i < page.props.clock.alarms.length; i++) {
+        if (page.props.clock.alarms[i].id == e.alarm_id) {
+          page.props.clock.alarms.splice(i, 1)
+          break
+        }
+      }
+    })
+    .listen('AlarmSnoozed', (e) => {
+      flash("Alarm Snoozed").add()
+      alarmSnoozed.value = true
+      snoozedAlarm.value = { ...e.alarm }
+      snoozedAlarm.value.snooze_count = e.count
+      alarmTriggered.value = false
+      triggeredAlarm.value = null
+    })
+    .listen('AlarmDismissed', (e) => {
+      flash("Alarm Dismissed").add()
+      dismissAlarm(false)
+    })
+})
+
+onUnmounted(() => {
+  window.Echo.leave(`clock.${clock.value.id}`)
+})
 </script>
 
 <template>

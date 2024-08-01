@@ -9,18 +9,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AlarmCreated implements ShouldBroadcastNow
+class AlarmSnoozed implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $alarm;
+    public $count;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Alarm $alarm)
+    public function __construct(Alarm $alarm, int $count)
     {
         $this->alarm = $alarm;
+        $this->count = $count;
     }
 
     /**
