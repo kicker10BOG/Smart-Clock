@@ -200,6 +200,7 @@ onMounted(() => {
       page.props.clock = e.clock
     })
     .listen('AlarmUpdated', (e) => {
+      flash("Alarm Updated").add()
       for (let i = 0; i < page.props.clock.alarms.length; i++) {
         if (page.props.clock.alarms[i].id == e.alarm.id) {
           page.props.clock.alarms[i] = e.alarm
@@ -208,9 +209,11 @@ onMounted(() => {
       }
     })
     .listen('AlarmCreated', (e) => {
+      flash("Alarm Created").add()
       page.props.clock.alarms.push(e.alarm)
     })
     .listen('AlarmDeleted', (e) => {
+      flash("Alarm Deleted").add()
       for (let i = 0; i < page.props.clock.alarms.length; i++) {
         if (page.props.clock.alarms[i].id == e.alarm_id) {
           page.props.clock.alarms.splice(i, 1)
@@ -219,6 +222,7 @@ onMounted(() => {
       }
     })
     .listen('AlarmSnoozed', (e) => {
+      console.log('alarm snoozed', e)
       flash("Alarm Snoozed").add()
       alarmSnoozed.value = true
       snoozedAlarm.value = { ...e.alarm }
@@ -227,6 +231,7 @@ onMounted(() => {
       triggeredAlarm.value = null
     })
     .listen('AlarmDismissed', (e) => {
+      console.log('alarm dismissed', e)
       flash("Alarm Dismissed").add()
       dismissAlarm(false)
     })

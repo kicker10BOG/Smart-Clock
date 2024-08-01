@@ -1,5 +1,7 @@
 <?php 
 
+// namespace App\Helpers;
+
 class Flash {
     public readonly String $id;
     public String $title = "";
