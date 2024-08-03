@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { usePage, router } from '@inertiajs/vue3';
+import { usePage, router, Head } from '@inertiajs/vue3';
 import { flash } from '@/Stores/flashMessages';
 import ClockForm from './Partials/ClockForm.vue'
 import ClockDisplay from './Partials/ClockDisplay.vue'
@@ -90,6 +90,7 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full">
+    <Head :title="`Manage ${clock.name}`" />
     <div class="container mx-auto">
       <div class="flex flex-col w-full">
         <h3>

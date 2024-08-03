@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { router } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import BasicPanel from '@/Components/BasicPanel.vue';
 import LinkButton from '@/Components/LinkButton.vue'
 import Icon from '@/Components/Icon.vue';
@@ -32,6 +32,7 @@ function deleteClock(clock, i) {
 
 <template>
   <div class="container mx-auto">
+    <Head title="Dashboard" />
     <div class="flex flex-col w-full">
       <div class="flex flex-row mt-2">
         <LinkButton :href="route('clocks.create')" type="standard">Create Clock</LinkButton>

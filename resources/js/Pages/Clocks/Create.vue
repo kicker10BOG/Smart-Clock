@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 import ClockForm from './Partials/ClockForm.vue'
 import ClockDisplay from './Partials/ClockDisplay.vue'
 import BasicPanel from '@/Components/BasicPanel.vue';
@@ -84,6 +84,7 @@ setInterval(() => {
 
 <template>
   <div class="w-full">
+    <Head title="New Clock" />
     <div class="container mx-auto">
       <div class="flex flex-col w-full">
         <h3>

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import ClockDisplay from './Partials/ClockDisplay.vue';
 import ClockManage from './Partials/ClockManage.vue';
 import { flash } from '@/Stores/flashMessages';
@@ -88,6 +88,7 @@ onUnmounted(() => {
 
 <template>
   <div class="flex flex-grow flex-col w-full justify-around">
+    <Head :title="clock.name" />
     <ClockDisplay ref="clockElement" v-model="clock" />
     <div v-if="user && clock.user_id == user.id" class="relative">
       <ClockManage v-model="clock"/>
