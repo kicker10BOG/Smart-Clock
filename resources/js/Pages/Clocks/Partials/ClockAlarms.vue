@@ -41,11 +41,11 @@ onMounted(() => {
       <div class="flex flex-row justify-start">
         <div class="mr-l">
           <LinkButton v-if="alarm.enabled" method="put" :href="route('alarms.disable', { alarm: alarm.id })" as="button"
-            type="good" size="sm">
+            type="good" size="sm" preserve-scroll>
             <Icon icon="check" size="sm" />
           </LinkButton>
           <LinkButton v-else method="put" :href="route('alarms.enable', { alarm: alarm.id })" as="button" type="bad"
-            size="sm">
+            size="sm" preserve-scroll>
             <Icon icon="x" size="sm" />
           </LinkButton>
         </div>
@@ -59,7 +59,7 @@ onMounted(() => {
         </div>
         <div class="ml-1">
           <LinkButton method="delete" :href="route('alarms.destroy', { alarm: alarm.id })" as="button" type="danger"
-            size="sm">
+            size="sm" preserve-scroll>
             <Icon icon="trash" size="sm" />
           </LinkButton>
         </div>
@@ -67,11 +67,11 @@ onMounted(() => {
       <div class="flex flex-row justify-start">
         <div v-for="(day, j) in days">
           <LinkButton v-if="alarm[day]" method="put" :href="route('alarms.disableDay', { alarm: alarm.id, day: day })"
-            as="button" type="good" size="sm">
+            as="button" type="good" size="sm" preserve-scroll>
             {{ daysShort[j] }}
           </LinkButton>
           <LinkButton v-else method="put" :href="route('alarms.enableDay', { alarm: alarm.id, day: day })" as="button"
-            type="bad" size="sm">
+            type="bad" size="sm" preserve-scroll>
             {{ daysShort[j] }}
           </LinkButton>
         </div>

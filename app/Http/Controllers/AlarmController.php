@@ -42,7 +42,10 @@ class AlarmController extends Controller
         $alarm = Alarm::create($validateAttributes);
         
         broadcast(new AlarmCreated($alarm));
-        return to_route('clocks.show', ['clock' => $clock]);
+        // if ($request->input('from_page') && $request->input('from_page') == 'manage') {
+        //     return to_route('clocks.manage', ['clock' => $alarm->clock]);
+        // }
+        // return to_route('clocks.show', ['clock' => $clock]);
     }
 
     /**
@@ -71,7 +74,6 @@ class AlarmController extends Controller
         $alarm->update($validateAttributes);
         
         broadcast(new AlarmUpdated($alarm));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**
@@ -86,7 +88,6 @@ class AlarmController extends Controller
         $alarm->save();
         
         broadcast(new AlarmUpdated($alarm));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**
@@ -101,7 +102,6 @@ class AlarmController extends Controller
         $alarm->save();
         
         broadcast(new AlarmUpdated($alarm));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**
@@ -117,7 +117,6 @@ class AlarmController extends Controller
         $alarm->delete();
         
         broadcast(new AlarmDeleted($id, $clock));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**
@@ -134,7 +133,6 @@ class AlarmController extends Controller
         $day = ucfirst($day);
         
         broadcast(new AlarmUpdated($alarm));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**
@@ -151,7 +149,6 @@ class AlarmController extends Controller
         $day = ucfirst($day);
 
         broadcast(new AlarmUpdated($alarm));
-        return to_route('clocks.show', ['clock' => $alarm->clock]);
     }
 
     /**

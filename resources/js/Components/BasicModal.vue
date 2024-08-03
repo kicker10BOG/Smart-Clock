@@ -41,6 +41,10 @@ function closeModal(e) {
     model.value = false
   }
 }
+
+defineExpose({
+  openModal, closeModal
+})
 </script>
 
 <template>

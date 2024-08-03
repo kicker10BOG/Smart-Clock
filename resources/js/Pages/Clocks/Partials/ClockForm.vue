@@ -105,6 +105,7 @@ else {
 const submit = () => {
   if (props.type == "update") {
     form.put(route('clocks.update', { 'clock': model.value.id }), {
+      preserveScroll: true,
       onSuccess: () => {
         model.value.show_date = Boolean(model.value.show_date)
         model.value.show_next_alarm = Boolean(model.value.show_next_alarm)

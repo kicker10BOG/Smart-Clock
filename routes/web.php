@@ -19,6 +19,7 @@ Route::controller(ClockController::class)->prefix('clock')->name('clocks.')->gro
     Route::middleware(['auth'])->group(function () {
         Route::get('/new', 'create')->name('create');
         Route::post('/new', 'store')->name('store');
+        Route::get('/{clock}/manage', 'manage')->whereNumber('clock')->name('manage');
         Route::put('/{clock}', 'update')->whereNumber('clock')->name('update');
         Route::delete('/{clock}', 'destroy')->whereNumber('clock')->name('destroy');
     });

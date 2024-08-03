@@ -176,15 +176,17 @@ function dismissAlarm(broadcast = true) {
   }
 }
 
-function snoozeAlarm() {
+function snoozeAlarm(broadcast = true, e = null) {
   if (!alarmSnoozed.value) {
     alarmSnoozed.value = true
-    snoozedAlarm.value = { ...triggeredAlarm.value }
+    snoozedAlarm.value = e ? { ...e.alarm } : { ...triggeredAlarm.value }
   }
   alarmTriggered.value = false
   triggeredAlarm.value = null
-  snoozedAlarm.value.snooze_count++
-  axios.post(route('alarms.snooze', { 'alarm': snoozedAlarm.value, 'count': snoozedAlarm.value.snooze_count }))
+  snoozedAlarm.value.snooze_count = e ? e.count : (snoozedAlarm.value.snooze_count + 1)
+  if (broadcast) {
+    axios.post(route('alarms.snooze', { 'alarm': snoozedAlarm.value, 'count': snoozedAlarm.value.snooze_count }))
+  }
 }
 
 updateTime()
@@ -193,67 +195,72 @@ getNextAlarm()
 setInterval(updateTime, 1000)
 setInterval(getNextAlarm, 2000)
 
-onMounted(() => {
-  window.Echo.channel(`clock.${clock.value.id}`)
-    .listen('ClockUpdated', (e) => {
-      flash("Clock Updated").add()
-      page.props.clock = e.clock
-    })
-    .listen('AlarmUpdated', (e) => {
-      flash("Alarm Updated").add()
-      for (let i = 0; i < page.props.clock.alarms.length; i++) {
-        if (page.props.clock.alarms[i].id == e.alarm.id) {
-          page.props.clock.alarms[i] = e.alarm
-          break
-        }
-      }
-    })
-    .listen('AlarmCreated', (e) => {
-      flash("Alarm Created").add()
-      page.props.clock.alarms.push(e.alarm)
-    })
-    .listen('AlarmDeleted', (e) => {
-      flash("Alarm Deleted").add()
-      for (let i = 0; i < page.props.clock.alarms.length; i++) {
-        if (page.props.clock.alarms[i].id == e.alarm_id) {
-          page.props.clock.alarms.splice(i, 1)
-          break
-        }
-      }
-    })
-    .listen('AlarmSnoozed', (e) => {
-      console.log('alarm snoozed', e)
-      flash("Alarm Snoozed").add()
-      alarmSnoozed.value = true
-      snoozedAlarm.value = { ...e.alarm }
-      snoozedAlarm.value.snooze_count = e.count
-      alarmTriggered.value = false
-      triggeredAlarm.value = null
-    })
-    .listen('AlarmDismissed', (e) => {
-      console.log('alarm dismissed', e)
-      flash("Alarm Dismissed").add()
-      dismissAlarm(false)
-    })
+defineExpose({
+  dismissAlarm,
+  snoozeAlarm, 
 })
 
-onUnmounted(() => {
-  window.Echo.leave(`clock.${clock.value.id}`)
-})
+// onMounted(() => {
+//   window.Echo.channel(`clock.${clock.value.id}`)
+//     .listen('ClockUpdated', (e) => {
+//       flash("Clock Updated").add()
+//       page.props.clock = e.clock
+//     })
+//     .listen('AlarmUpdated', (e) => {
+//       flash("Alarm Updated").add()
+//       for (let i = 0; i < page.props.clock.alarms.length; i++) {
+//         if (page.props.clock.alarms[i].id == e.alarm.id) {
+//           page.props.clock.alarms[i] = e.alarm
+//           break
+//         }
+//       }
+//     })
+//     .listen('AlarmCreated', (e) => {
+//       flash("Alarm Created").add()
+//       page.props.clock.alarms.push(e.alarm)
+//     })
+//     .listen('AlarmDeleted', (e) => {
+//       flash("Alarm Deleted").add()
+//       for (let i = 0; i < page.props.clock.alarms.length; i++) {
+//         if (page.props.clock.alarms[i].id == e.alarm_id) {
+//           page.props.clock.alarms.splice(i, 1)
+//           break
+//         }
+//       }
+//     })
+//     .listen('AlarmSnoozed', (e) => {
+//       console.log('alarm snoozed', e)
+//       flash("Alarm Snoozed").add()
+//       alarmSnoozed.value = true
+//       snoozedAlarm.value = { ...e.alarm }
+//       snoozedAlarm.value.snooze_count = e.count
+//       alarmTriggered.value = false
+//       triggeredAlarm.value = null
+//     })
+//     .listen('AlarmDismissed', (e) => {
+//       console.log('alarm dismissed', e)
+//       flash("Alarm Dismissed").add()
+//       dismissAlarm(false)
+//     })
+// })
+
+// onUnmounted(() => {
+//   window.Echo.leave(`clock.${clock.value.id}`)
+// })
 </script>
 
 <template>
   <div class="flex flex-col flex-grow w-full">
-    <div ref="dateElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
-      :style="`font-size: ${model.date_size}px; font-family: ${model.date_font};`">
+    <div ref="dateElement" class="absolute whitespace-nowrap opacity-0 z-0"
+      :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; top:-10000px; left: -10000px;`">
       {{ dateStr }}
     </div>
-    <div ref="timeElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
-      :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font};`">
+    <div ref="timeElement" class="absolute whitespace-nowrap opacity-0 z-0"
+      :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; top:-10000px; left: -10000px;`">
       {{ timeStr }}
     </div>
-    <div ref="alarmElement" class="absolute whitespace-nowrap opacity-0 top-0 left-0 z-0"
-      :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font};`">
+    <div ref="alarmElement" class="absolute whitespace-nowrap opacity-0 z-0"
+      :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; top:-10000px; left: -10000px;`">
       <div v-if="alarmSnoozed">
         Snoozed: {{ snoozedStr }}
         <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>

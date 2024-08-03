@@ -19,6 +19,18 @@ class ClockController extends Controller
     }
 
     /**
+     * Manage a clock
+     */
+    public function manage(Request $request, Clock $clock)
+    {
+        if ($request->user()->cannot('update', $clock)) {
+            abort(403);
+        }
+
+        return Inertia::render('Clocks/Manage', ['clock' => $clock]);
+    }
+
+    /**
      * A form to create a new clock
      */
     public function create(Request $request)
@@ -110,13 +122,10 @@ class ClockController extends Controller
         $validateAttributes['show_ampm'] = $request->input('show_ampm');
         $validateAttributes['shorten_ampm'] = $request->input('shorten_ampm');
 
-        $validateAttributes['user_id'] = $request->user()->id;
-
         $clock->update($validateAttributes);
 
         // flash('Clock Updated');
         broadcast(new ClockUpdated($clock));
-        return to_route('clocks.show', ['clock' => $clock]);
     }
 
     /**

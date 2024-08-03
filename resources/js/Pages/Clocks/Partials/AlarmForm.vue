@@ -35,11 +35,15 @@ const form = useForm({
 const submitForm = () => {
   if (form.id) {
     const url = route('alarms.update', {alarm: form.id})
-    form.put(url)
+    form.put(url, {
+      preserveScroll: true,
+    })
   }
   else {
     const url = route('alarms.store')
-    form.post(url)
+    form.post(url, {
+      preserveScroll: true,
+    })
   }
   emit('submit')
 }
