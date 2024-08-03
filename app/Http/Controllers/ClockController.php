@@ -86,7 +86,7 @@ class ClockController extends Controller
         $validateAttributes = $request->validate([
             'name' => ['required', 'max: 255'],
             'month_format' => [Rule::in(['short', 'long'])],
-            'weekday_format' => [Rule::in(['short', 'long', 'hidden'])],
+            'weekday_format' => [Rule::in(['short', 'long', 'hide'])],
             'width' => ['integer', 'numeric', 'between:1, 10000'],
             'height' => ['integer', 'numeric', 'between:1, 10000'],
             'date_x' => ['integer', 'numeric', 'between:-10000, 10000'],
