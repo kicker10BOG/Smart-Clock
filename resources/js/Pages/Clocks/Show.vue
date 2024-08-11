@@ -45,16 +45,16 @@ function setColor() {
   const now = new Date()
   let cC = null
   let colorDiff = null
-  let d = new Date(now)
   page.props.clock.colors.forEach(color => {
+    let d = new Date(now)
     if (color.enabled) {
       d.setHours(color.hour, color.minute, 0)
-      let diff = now - d
+      let diff = d - now
       if (diff > 0) {
         d.setDate(d.getDate() - 1)
         diff = d - now
       }
-      if (colorDiff == null || diff < colorDiff) {
+      if (colorDiff == null || diff > colorDiff) {
         colorDiff = diff
         cC = color
       }
