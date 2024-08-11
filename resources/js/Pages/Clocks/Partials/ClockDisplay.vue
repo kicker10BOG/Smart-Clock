@@ -26,6 +26,7 @@ const triggeredAlarm = ref(null)
 const alarmSnoozed = ref(false)
 const snoozedAlarm = ref(null)
 const snoozedStr = ref('')
+const colorStyle = ref('')
 
 const weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const weekdaysLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -98,6 +99,16 @@ function updateTime() {
   }
 }
 
+function getMostRecent(now, color) {
+  let d = new Date(now)
+  d.setHours(color.hour, color.minute, 0)
+  let diff = now - d
+  if (diff > 0) {
+    d.setDate(d.getDate() - 1)
+    diff = d - now
+  }
+}
+
 function getNextOccurenceDiff(now, alarm) {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
   let dateDiff = null
@@ -145,10 +156,8 @@ function getNextOccurenceDiff(now, alarm) {
   }
 }
 
-function getNextAlarm() {
-  if (model.value.alarms == undefined) {
-    return
-  }
+function everyTwoSeconds() {
+  // get next alarm
   const now = new Date()
   let nA = null
   model.value.alarms.forEach(alarm => {
@@ -160,6 +169,31 @@ function getNextAlarm() {
     }
   });
   nextAlarm.value = nA
+  // get current color values
+  let cC = null
+  let colorDiff = null
+  model.value.colors.forEach(color => {
+    let d = new Date(now)
+    if (color.enabled) {
+      d.setHours(color.hour, color.minute, 0)
+      let diff = d - now
+      if (diff > 0) {
+        d.setDate(d.getDate() - 1)
+        diff = d - now
+      }
+      if (colorDiff == null || diff > colorDiff) {
+        colorDiff = diff
+        cC = color
+      }
+    }
+  })
+  if (cC) {
+    colorStyle.value = cC.background != 'default' ? `background: ${cC.background}; ` : ''
+    colorStyle.value += cC.text != 'default' ? `color: ${cC.text};` : ''
+  }
+  else {
+    colorStyle.value = ''
+  }
 }
 
 function dismissAlarm(broadcast = true) {
@@ -189,64 +223,26 @@ function snoozeAlarm(broadcast = true, e = null) {
   }
 }
 
-updateTime()
-getNextAlarm()
+let oneSecondInterval = null
+let twoSecondInterval = null
 
-setInterval(updateTime, 1000)
-setInterval(getNextAlarm, 2000)
+updateTime()
+everyTwoSeconds()
 
 defineExpose({
   dismissAlarm,
-  snoozeAlarm, 
+  snoozeAlarm,
 })
 
-// onMounted(() => {
-//   window.Echo.channel(`clock.${clock.value.id}`)
-//     .listen('ClockUpdated', (e) => {
-//       flash("Clock Updated").add()
-//       page.props.clock = e.clock
-//     })
-//     .listen('AlarmUpdated', (e) => {
-//       flash("Alarm Updated").add()
-//       for (let i = 0; i < page.props.clock.alarms.length; i++) {
-//         if (page.props.clock.alarms[i].id == e.alarm.id) {
-//           page.props.clock.alarms[i] = e.alarm
-//           break
-//         }
-//       }
-//     })
-//     .listen('AlarmCreated', (e) => {
-//       flash("Alarm Created").add()
-//       page.props.clock.alarms.push(e.alarm)
-//     })
-//     .listen('AlarmDeleted', (e) => {
-//       flash("Alarm Deleted").add()
-//       for (let i = 0; i < page.props.clock.alarms.length; i++) {
-//         if (page.props.clock.alarms[i].id == e.alarm_id) {
-//           page.props.clock.alarms.splice(i, 1)
-//           break
-//         }
-//       }
-//     })
-//     .listen('AlarmSnoozed', (e) => {
-//       console.log('alarm snoozed', e)
-//       flash("Alarm Snoozed").add()
-//       alarmSnoozed.value = true
-//       snoozedAlarm.value = { ...e.alarm }
-//       snoozedAlarm.value.snooze_count = e.count
-//       alarmTriggered.value = false
-//       triggeredAlarm.value = null
-//     })
-//     .listen('AlarmDismissed', (e) => {
-//       console.log('alarm dismissed', e)
-//       flash("Alarm Dismissed").add()
-//       dismissAlarm(false)
-//     })
-// })
+onMounted(() => {
+  oneSecondInterval = setInterval(updateTime, 1000)
+  twoSecondInterval = setInterval(everyTwoSeconds, 2000)
+})
 
-// onUnmounted(() => {
-//   window.Echo.leave(`clock.${clock.value.id}`)
-// })
+onUnmounted(() => {
+  clearInterval(oneSecondInterval)
+  clearInterval(twoSecondInterval)
+})
 </script>
 
 <template>
@@ -273,7 +269,7 @@ defineExpose({
         <span v-else>None Enabled</span>
       </div>
     </div>
-    <div class="relative m-auto overflow-hidden" :style="`width: ${model.width}px; height:${model.height}px;`">
+    <div class="relative m-auto overflow-hidden" :style="`width: ${model.width}px; height:${model.height}px; ${colorStyle}`">
       <div v-if="model.show_date && dateElement" class="absolute whitespace-nowrap"
         :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; left: ${model.date_x + clockCenterX - (dateElement.clientWidth / 2)}px; bottom: ${model.date_y + clockCentery - (dateElement.clientHeight / 2)}px;`">
         {{ dateStr }}

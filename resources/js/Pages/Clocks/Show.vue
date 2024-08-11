@@ -16,6 +16,7 @@ const page = usePage()
 const user = computed(() => page.props.auth.user)
 const clock = computed(() => page.props.clock)
 const clockElement = ref(null)
+const colorStyle = ref('')
 
 let timeout = null
 const wakeTime = 3000
@@ -39,7 +40,40 @@ document.onmousedown = function () {
   timeout = setTimeout(hideMouseCursor, wakeTime);
 };
 
+function setColor() {
+  // get current color values
+  const now = new Date()
+  let cC = null
+  let colorDiff = null
+  let d = new Date(now)
+  page.props.clock.colors.forEach(color => {
+    if (color.enabled) {
+      d.setHours(color.hour, color.minute, 0)
+      let diff = now - d
+      if (diff > 0) {
+        d.setDate(d.getDate() - 1)
+        diff = d - now
+      }
+      if (colorDiff == null || diff < colorDiff) {
+        colorDiff = diff
+        cC = color
+      }
+    }
+  })
+  if (cC) {
+    colorStyle.value = cC.background != 'default' ? `background: ${cC.background}; ` : ''
+    colorStyle.value += cC.text != 'default' ? `color: ${cC.text};` : ''
+  }
+  else {
+    colorStyle.value = ''
+  }
+}
+
+let colorInterval = null
+
 onMounted(() => {
+  setColor()
+  colorInterval = setInterval(setColor, 2000);
   window.Echo.channel(`clock.${clock.value.id}`)
     .listen('ClockUpdated', (e) => {
       flash("Clock Updated").add()
@@ -79,19 +113,43 @@ onMounted(() => {
         clockElement.value.dismissAlarm(false)
       }
     })
+    .listen('ColorEvent', (e) => {
+      flash(e.message).add()
+      if (e.type == 'create') {
+        page.props.clock.colors.push(e.color)
+      }
+      else if (['update', 'enable', 'disable'].includes(e.type)) {
+        for (let i = 0; i < page.props.clock.colors.length; i++) {
+          if (page.props.clock.colors[i].id == e.color.id) {
+            page.props.clock.colors[i] = e.color
+            break
+          }
+        }
+      }
+      else if (e.type == 'delete') {
+        for (let i = 0; i < page.props.clock.colors.length; i++) {
+          if (page.props.clock.colors[i].id == e.color_id) {
+            page.props.clock.colors.splice(i, 1)
+            break
+          }
+        }
+      }
+    })
 })
 
 onUnmounted(() => {
   window.Echo.leave(`clock.${clock.value.id}`)
+  clearInterval(colorInterval)
 })
 </script>
 
 <template>
   <div class="flex flex-grow flex-col w-full justify-around">
+
     <Head :title="clock.name" />
-    <ClockDisplay ref="clockElement" v-model="clock" />
-    <div v-if="user && clock.user_id == user.id" class="relative">
-      <ClockManage v-model="clock"/>
+    <ClockDisplay ref="clockElement" v-model="clock" :style="colorStyle" />
+    <div v-if="$page.props.auth.user && clock.user_id == user.id" class="relative">
+      <ClockManage v-model="clock" />
     </div>
   </div>
 </template>

@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AlarmController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClockController;
+use App\Http\Controllers\ColorController;
 
 Route::get('/', [MainController::class, 'home'])->name('home');
 Route::put('/flash', [MainController::class, 'addFlash'])->name('addFlash');
@@ -36,6 +37,16 @@ Route::controller(AlarmController::class)->prefix('alarm')->name('alarms.')->gro
         Route::put('/{alarm}/{day}/disable', 'disableDay')->whereNumber('alarm')->name('disableDay');
         Route::post('/{alarm}/dismiss', 'dismiss')->whereNumber('alarm')->name('dismiss');
         Route::post('/{alarm}/snooze/{count}', 'snooze')->whereNumber('alarm')->name('snooze');
+    });
+});
+
+Route::controller(ColorController::class)->prefix('color')->name('colors.')->group(function () {
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/new', 'store')->name('store');
+        Route::put('/{color}', 'update')->whereNumber('color')->name('update');
+        Route::delete('/{color}', 'destroy')->whereNumber('color')->name('destroy');
+        Route::put('/{color}/enable', 'enable')->whereNumber('color')->name('enable');
+        Route::put('/{color}/disable', 'disable')->whereNumber('color')->name('disable');
     });
 });
 

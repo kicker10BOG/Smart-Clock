@@ -24,14 +24,14 @@ class Clock extends Model
      *
      * @var array
      */
-    protected $appends = ['alarm_count', 'clock_colors_count', 'username'];
+    protected $appends = ['alarm_count', 'colors_count', 'username'];
 
     /**
      * The relationships that should always be loaded.
      *
      * @var array
      */
-    protected $with = ['alarms'];
+    protected $with = ['alarms', 'colors'];
 
     /**
      * The user this belongs to
@@ -52,7 +52,7 @@ class Clock extends Model
     /**
      * Get the ClockColors this Clock owns
      */
-    public function clockColors(): HasMany
+    public function colors(): HasMany
     {
         return $this->hasMany(ClockColors::class);
     }
@@ -70,10 +70,10 @@ class Clock extends Model
     /**
      * Get the amount of clockColors
      */
-    public function clockColorsCount(): Attribute
+    public function colorsCount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->clockColors()->count()
+            get: fn () => $this->colors()->count()
         );
     }
 

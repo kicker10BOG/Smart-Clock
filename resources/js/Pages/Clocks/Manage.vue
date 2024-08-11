@@ -10,6 +10,7 @@ import LinkButton from '@/Components/LinkButton.vue';
 import Icon from '@/Components/Icon.vue';
 import BasicButton from '@/Components/BasicButton.vue';
 import BasicModal from '@/Components/BasicModal.vue';
+import ClockColors from './Partials/ClockColors.vue';
 
 const props = defineProps({
   clock: {
@@ -115,6 +116,10 @@ onUnmounted(() => {
         <BasicPanel :collapsible="true" :startCollapsed="true">
           <template #header>Alarms</template>
           <ClockAlarms />
+        </BasicPanel>
+        <BasicPanel :collapsible="true" :startCollapsed="true">
+          <template #header>Color Changes</template>
+          <ClockColors />
         </BasicPanel>
         <BasicPanel :collapsible="true" :startCollapsed="true" class="z-0">
           <template #header>Preview</template>

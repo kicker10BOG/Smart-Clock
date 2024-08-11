@@ -21,26 +21,22 @@ const form = useForm({
     hour: model.value ? model.value.hour : 8,
     minute: model.value ? model.value.minute : 0,
   },
-  snooze_length: model.value ? model.value.snooze_length : 10,
+  default_bg: model.value && model.value.background == 'default',
+  default_text: model.value && model.value.text == 'default',
+  background: model.value ? (model.value.background == 'default' ? '#000000' : model.value.background) : '#000000',
+  text: model.value ? (model.value.text == 'default' ? '#ffffff' : model.value.text) : '#ffffff',
   enabled: model.value ? Boolean(model.value.enabled) : true,
-  sunday: model.value ? Boolean(model.value.sunday) : false,
-  monday: model.value ? Boolean(model.value.monday) : true,
-  tuesday: model.value ? Boolean(model.value.tuesday) : true,
-  wednesday: model.value ? Boolean(model.value.wednesday) : true,
-  thursday: model.value ? Boolean(model.value.thursday) : true,
-  friday: model.value ? Boolean(model.value.friday) : true,
-  saturday: model.value ? Boolean(model.value.saturday) : false,
 })
 
 const submitForm = () => {
   if (form.id) {
-    const url = route('alarms.update', {alarm: form.id})
+    const url = route('colors.update', {color: form.id})
     form.put(url, {
       preserveScroll: true,
     })
   }
   else {
-    const url = route('alarms.store')
+    const url = route('colors.store')
     form.post(url, {
       preserveScroll: true,
     })
@@ -59,20 +55,19 @@ const submitForm = () => {
         <TimeInput id="time" label="Time" v-model="form.time" :use_12hr="clock.use_12hr" class="flex-grow" />
       </div>
       <div class="flex flex-row w-72 justify-start">
-        <TextInput id="snooze_length" label="Sleep Length" v-model="form.snooze_length" type="number" step="1" min="1"
-          inputClass="w-16" />
+        <Checkbox id="default_bg" label="Default Background" v-model="form.default_bg" />
+      </div>
+      <div v-if="!form.default_bg" class="flex flex-row w-72 justify-start">
+        <TextInput id="background" label="Background" type="color" v-model="form.background" inputClass="w-8 p-1" />
+      </div>
+      <div class="flex flex-row w-72 justify-start">
+        <Checkbox id="default_text" label="Default Text" v-model="form.default_text" />
+      </div>
+      <div v-if="!form.default_text" class="flex flex-row w-72 justify-start">
+        <TextInput id="text" label="Text Color" type="color" v-model="form.text" inputClass="w-8 p-1" />
       </div>
       <div class="flex flex-row w-72 justify-start">
         <Checkbox id="enabled" label="Enable" v-model="form.enabled" />
-      </div>
-      <div class="flex flex-row w-72 justify-start">
-        <Checkbox id="sunday" label="Sun" v-model="form.sunday" position="top" />
-        <Checkbox id="monday" label="Mon" v-model="form.monday" position="top" />
-        <Checkbox id="tuesday" label="Tue" v-model="form.tuesday" position="top" />
-        <Checkbox id="wednesday" label="Wed" v-model="form.wednesday" position="top" />
-        <Checkbox id="thursday" label="Thu" v-model="form.thursday" position="top" />
-        <Checkbox id="friday" label="Fri" v-model="form.friday" position="top" />
-        <Checkbox id="saturday" label="Sat" v-model="form.saturday" position="top" />
       </div>
       <div class="flex flex-row w-72 justify-end">
         <BasicButton type="submit" @click="submitForm">Submit</BasicButton>

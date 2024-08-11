@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('clock_id')->constrained();
-            $table->time('start_time', 0)->default('08:00:00');
+            $table->string('name', 255)->nullable()->default(null);
+            $table->unsignedTinyInteger('hour')->default(8);
+            $table->unsignedTinyInteger('minute')->default(0);
             $table->string('background', 7)->default('#000000');
             $table->string('text', 7)->default('#ffffff');
+            $table->boolean('enabled')->default(true);
         });
     }
 

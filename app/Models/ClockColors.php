@@ -11,6 +11,20 @@ class ClockColors extends Model
     use HasFactory;
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+
+    /**
+     * The attributes that aren't included in json.
+     *
+     * @var array
+     */
+    protected $hidden = ['clock'];
+
+    /**
      * The clock this belongs to
      */
     public function clock(): BelongsTo

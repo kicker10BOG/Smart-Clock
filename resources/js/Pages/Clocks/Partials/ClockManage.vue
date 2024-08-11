@@ -9,6 +9,7 @@ import ClockForm from './ClockForm.vue'
 import ClockAlarms from './ClockAlarms.vue'
 import showNav from '@/Stores/showNav.js'
 import { ref, watch } from 'vue'
+import ClockColors from './ClockColors.vue'
 
 const model = defineModel()
 const emit = defineEmits(['update:model-value', 'opened', 'closed'])
@@ -31,8 +32,8 @@ const deleteClock = () => {
 <template>
   <SlideTransition direction="up">
     <div v-if="showNav" class="fixed right-0 bottom-0">
-      <Dropdown v-model="opened" direction="left" placement="right" vertPlacement="above" subHeight="130" :opacity="0.97"
-        :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
+      <Dropdown v-model="opened" direction="left" placement="right" vertPlacement="above" subHeight="130"
+        :opacity="0.97" :clickAwayToClose="false" :makeFixed="true" fixedBottom="85" fixedRight="12">
         <template #button>
           <div class="fixed bottom-10 right-2">
             <BasicButton type="button">
@@ -48,6 +49,10 @@ const deleteClock = () => {
           <BasicPanel :collapsible="true" :startCollapsed="true">
             <template #header>Alarms</template>
             <ClockAlarms />
+          </BasicPanel>
+          <BasicPanel :collapsible="true" :startCollapsed="true">
+            <template #header>Color Changes</template>
+            <ClockColors />
           </BasicPanel>
           <BasicPanel :collapsible="true" :startCollapsed="true">
             <template #header>delete</template>
