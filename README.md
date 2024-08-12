@@ -19,6 +19,7 @@ This also makes it easier to get started quickly.
 Support for multiple users and each user can have multiple clocks.
 
 Clocks have a few configuration settings so they can be customized to your liking. 
+The background and font colors can also be customized and set to change at specific times. 
 More will come as I continue to develop this web app. 
 
 Clocks can also have multiple alarms set. 
@@ -33,7 +34,6 @@ More features will come.
 Features that will definitely be added:
 
 * Greater customization of the text and layout
-* Customizing colors of the clock
 
 I have other ideas that may or may not be added. Things like adding stopwatch and timer options that sync between devices too. 
 
