@@ -7,6 +7,9 @@ The "Smart" in "Smart Clock" isn't true quite yet, but I am working on it.
 The idea behind this is you can have a central location to manage clocks in your house, or anywhere in the world if you want. 
 The clocks use webports via soketi to automatically update everywhere when an event happens. 
 
+The current state is what I originally set out to do, so it is the 1.0 version. 
+Of course, ideas to improve it upon have popped up, so I plan to keep working on it.
+
 Currently, a browser needs to be open at the the time an alarm should trigger for it to actually trigger. 
 I may look into having the server trigger it in a future update. 
 This would also make it possible to have it call some other api so it could trigger some other event, maybe something in your smart home. 
