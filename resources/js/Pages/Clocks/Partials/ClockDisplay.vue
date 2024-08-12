@@ -223,6 +223,14 @@ function snoozeAlarm(broadcast = true, e = null) {
   }
 }
 
+function dKeyPressed() {
+  dismissAlarm()
+}
+
+function sKeyPressed() {
+  snoozeAlarm()
+}
+
 let oneSecondInterval = null
 let twoSecondInterval = null
 
@@ -237,11 +245,26 @@ defineExpose({
 onMounted(() => {
   oneSecondInterval = setInterval(updateTime, 1000)
   twoSecondInterval = setInterval(everyTwoSeconds, 2000)
+  document.addEventListener("keydown", (e) => {
+    if (e.code == 'KeyD') {
+      console.log('dismiss')
+      if (alarmTriggered.value || alarmSnoozed.value) {
+        dismissAlarm()
+      }
+    }
+    else if (e.code == 'KeyS') {
+      console.log('snooze')
+      if (alarmTriggered.value) {
+        snoozeAlarm()
+      }
+    }
+  })
 })
 
 onUnmounted(() => {
   clearInterval(oneSecondInterval)
   clearInterval(twoSecondInterval)
+  document.removeEventListener('keydown')
 })
 </script>
 
