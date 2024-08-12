@@ -4,7 +4,6 @@ import { ref, computed, onUnmounted, onMounted } from 'vue'
 import BasicModal from '@/Components/BasicModal.vue'
 import BasicButton from '@/Components/BasicButton.vue';
 import { usePage } from '@inertiajs/vue3';
-import { flash } from "@/Stores/flashMessages";
 
 const model = defineModel()
 const page = usePage()
@@ -27,6 +26,7 @@ const alarmSnoozed = ref(false)
 const snoozedAlarm = ref(null)
 const snoozedStr = ref('')
 const colorStyle = ref('')
+const colorStyleDot = ref('')
 
 const weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const weekdaysLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -71,10 +71,10 @@ function updateTime() {
 
   currMinute.value = currMinute.value > 9 ? currMinute.value : '0' + currMinute.value
   currSecond.value = !model.value.show_seconds ? '' : (':' + (currSecond.value > 9 ? currSecond.value : '0' + currSecond.value))
-  currAMPM.value = !model.value.show_ampm ? '' : model.value.shorten_ampm ? currAMPM.value : currAMPM.value + 'M'
+  // currAMPM.value = ['dot_pm', 'dot_am', 'hide'].includes(model.value.ampm_format) ? '' : model.value.ampm_format == 'a_p' ? currAMPM.value : currAMPM.value + 'M'
 
   dateStr.value = `${currWeekday.value} ${currMonth.value} ${currMonthDay.value}`
-  timeStr.value = `${currHour.value}:${currMinute.value}${currSecond.value} ${currAMPM.value}`
+  timeStr.value = `${currHour.value}:${currMinute.value}${currSecond.value} ${['dot_pm', 'dot_am', 'hide'].includes(model.value.ampm_format) ? '' : model.value.ampm_format == 'a_p' ? currAMPM.value : currAMPM.value + 'M'}`
 
   if (currTime.value.getSeconds() == 0) {
     if (alarmSnoozed.value) {
@@ -96,16 +96,6 @@ function updateTime() {
         audioElement.value.play()
       }
     }
-  }
-}
-
-function getMostRecent(now, color) {
-  let d = new Date(now)
-  d.setHours(color.hour, color.minute, 0)
-  let diff = now - d
-  if (diff > 0) {
-    d.setDate(d.getDate() - 1)
-    diff = d - now
   }
 }
 
@@ -157,42 +147,52 @@ function getNextOccurenceDiff(now, alarm) {
 }
 
 function everyTwoSeconds() {
-  // get next alarm
   const now = new Date()
-  let nA = null
-  model.value.alarms.forEach(alarm => {
-    if (alarm.enabled) {
-      let nO = getNextOccurenceDiff(now, alarm)
-      if (nA == null || nO.diff < nA.diff) {
-        nA = { ...nO }
+  // get next alarm
+  if (model.value.alarms) {
+    let nA = null
+    model.value.alarms.forEach(alarm => {
+      if (alarm.enabled) {
+        let nO = getNextOccurenceDiff(now, alarm)
+        if (nA == null || nO.diff < nA.diff) {
+          nA = { ...nO }
+        }
       }
-    }
-  });
-  nextAlarm.value = nA
+    });
+    nextAlarm.value = nA
+  }
   // get current color values
-  let cC = null
-  let colorDiff = null
-  model.value.colors.forEach(color => {
-    let d = new Date(now)
-    if (color.enabled) {
-      d.setHours(color.hour, color.minute, 0)
-      let diff = d - now
-      if (diff > 0) {
-        d.setDate(d.getDate() - 1)
-        diff = d - now
+  if (model.value.colors) {
+    let cC = null
+    let colorDiff = null
+    model.value.colors.forEach(color => {
+      let d = new Date(now)
+      if (color.enabled) {
+        d.setHours(color.hour, color.minute, 0)
+        let diff = d - now
+        if (diff > 0) {
+          d.setDate(d.getDate() - 1)
+          diff = d - now
+        }
+        if (colorDiff == null || diff > colorDiff) {
+          colorDiff = diff
+          cC = color
+        }
       }
-      if (colorDiff == null || diff > colorDiff) {
-        colorDiff = diff
-        cC = color
-      }
+    })
+    if (cC) {
+      colorStyle.value = cC.background != 'default' ? `background: ${cC.background}; ` : ''
+      colorStyle.value += cC.text != 'default' ? `color: ${cC.text};` : ''
+      colorStyleDot.value = cC.text != 'default' ? `background: ${cC.text};` : ''
     }
-  })
-  if (cC) {
-    colorStyle.value = cC.background != 'default' ? `background: ${cC.background}; ` : ''
-    colorStyle.value += cC.text != 'default' ? `color: ${cC.text};` : ''
+    else {
+      colorStyle.value = ''
+      colorStyleDot.value = ''
+    }
   }
   else {
     colorStyle.value = ''
+    colorStyleDot.value = ''
   }
 }
 
@@ -251,9 +251,17 @@ onUnmounted(() => {
       :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; top:-10000px; left: -10000px;`">
       {{ dateStr }}
     </div>
-    <div ref="timeElement" class="absolute whitespace-nowrap opacity-0 z-0"
+    <div ref="timeElement" class="absolute whitespace-nowrap flex flex-row opacity-0 z-0"
       :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; top:-10000px; left: -10000px;`">
-      {{ timeStr }}
+      <span>
+        {{ timeStr }}
+      </span>
+      <div
+        v-if="(model.ampm_format == 'dot_pm' && currAMPM == 'P') || (model.ampm_format == 'dot_am' && currAMPM == 'A')"
+        class="flex flex-col justify-center">
+        <div class="bg-black dark:bg-white inline-block mt-0 rounded-full"
+          :style="`width: ${model.ampm_dot_size}px; height: ${model.ampm_dot_size}px; ${colorStyleDot}`" />
+      </div>
     </div>
     <div ref="alarmElement" class="absolute whitespace-nowrap opacity-0 z-0"
       :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; top:-10000px; left: -10000px;`">
@@ -269,14 +277,23 @@ onUnmounted(() => {
         <span v-else>None Enabled</span>
       </div>
     </div>
-    <div class="relative m-auto overflow-hidden" :style="`width: ${model.width}px; height:${model.height}px; ${colorStyle}`">
+    <div class="relative m-auto overflow-hidden"
+      :style="`width: ${model.width}px; height:${model.height}px; ${colorStyle}`">
       <div v-if="model.show_date && dateElement" class="absolute whitespace-nowrap"
         :style="`font-size: ${model.date_size}px; font-family: ${model.date_font}; left: ${model.date_x + clockCenterX - (dateElement.clientWidth / 2)}px; bottom: ${model.date_y + clockCentery - (dateElement.clientHeight / 2)}px;`">
         {{ dateStr }}
       </div>
-      <div v-if="timeElement" class="absolute whitespace-nowrap"
+      <div v-if="timeElement" class="absolute whitespace-nowrap flex flex-row"
         :style="`font-size: ${model.time_size}px; font-family: ${model.clock_font}; left: ${model.clock_x + clockCenterX - (timeElement.clientWidth / 2)}px; bottom: ${model.clock_y + clockCentery - (timeElement.clientHeight / 2)}px;`">
-        {{ timeStr }}
+        <span>
+          {{ timeStr }}
+        </span>
+        <div
+          v-if="(model.ampm_format == 'dot_pm' && currAMPM == 'P') || (model.ampm_format == 'dot_am' && currAMPM == 'A')"
+          class="flex flex-col justify-center">
+          <div class="bg-black dark:bg-white inline-block mt-0 rounded-full"
+            :style="`width: ${model.ampm_dot_size}px; height: ${model.ampm_dot_size}px; ${colorStyleDot}`" />
+        </div>
       </div>
       <div v-if="model.show_next_alarm && alarmElement" class="absolute whitespace-nowrap"
         :style="`font-size: ${model.alarm_size}px; font-family: ${model.alarm_font}; left: ${model.alarm_x + clockCenterX - (alarmElement.clientWidth / 2)}px; bottom: ${model.alarm_y + clockCentery - (alarmElement.clientHeight / 2)}px;`">

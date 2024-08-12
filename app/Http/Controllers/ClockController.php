@@ -55,6 +55,8 @@ class ClockController extends Controller
             'name' => ['string', 'required', 'max: 255'],
             'month_format' => [Rule::in(['short', 'long'])],
             'weekday_format' => [Rule::in(['short', 'long', 'hide'])],
+            'ampm_format' => [Rule::in(['am_pm', 'a_p', 'dot_pm', 'dot_am', 'hide'])],
+            'ampm_dot_size' => ['integer', 'numeric', 'min:1'],
             'width' => ['integer', 'numeric', 'between:1, 10000'],
             'height' => ['integer', 'numeric', 'between:1, 10000'],
             'date_x' => ['integer', 'numeric', 'between:-10000, 10000'],
@@ -99,6 +101,8 @@ class ClockController extends Controller
             'name' => ['required', 'max: 255'],
             'month_format' => [Rule::in(['short', 'long'])],
             'weekday_format' => [Rule::in(['short', 'long', 'hide'])],
+            'ampm_format' => [Rule::in(['am_pm', 'a_p', 'dot_pm', 'dot_am', 'hide'])],
+            'ampm_dot_size' => ['integer', 'numeric', 'min:1'],
             'width' => ['integer', 'numeric', 'between:1, 10000'],
             'height' => ['integer', 'numeric', 'between:1, 10000'],
             'date_x' => ['integer', 'numeric', 'between:-10000, 10000'],
@@ -124,7 +128,6 @@ class ClockController extends Controller
 
         $clock->update($validateAttributes);
 
-        // flash('Clock Updated');
         broadcast(new ClockUpdated($clock));
     }
 

@@ -25,6 +25,8 @@ const form = useForm({
   show_next_alarm: true,
   show_seconds: false,
   use_12hr: true,
+  ampm_format: 'dot_pm',
+  ampm_dot_size: 80,
   show_ampm: true,
   shorten_ampm: true,
   width: 1024,
@@ -58,6 +60,8 @@ if (useModel) {
   form.show_next_alarm = computed(() => model.value.show_next_alarm)
   form.show_seconds = computed(() => model.value.show_seconds)
   form.use_12hr = computed(() => model.value.use_12hr)
+  form.ampm_format = computed(() => model.value.ampm_format)
+  form.ampm_dot_size = computed(() => model.value.ampm_dot_size)
   form.show_ampm = computed(() => model.value.show_ampm)
   form.shorten_ampm = computed(() => model.value.shorten_ampm)
   form.width = computed(() => model.value.width)
@@ -84,6 +88,8 @@ else {
   model.value.show_next_alarm = computed(() => form.show_next_alarm)
   model.value.show_seconds = computed(() => form.show_seconds)
   model.value.use_12hr = computed(() => form.use_12hr)
+  model.value.ampm_format = computed(() => form.ampm_format)
+  model.value.ampm_dot_size = computed(() => form.ampm_dot_size)
   model.value.show_ampm = computed(() => form.show_ampm)
   model.value.shorten_ampm = computed(() => form.shorten_ampm)
   model.value.width = computed(() => form.width)

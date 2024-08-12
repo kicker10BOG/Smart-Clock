@@ -43,9 +43,18 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
           <SelectInput id="weekday_format" label="Weekday Format" v-model="model.weekday_format" class="w-fit">
-            <option value="hide">Hide</option>
             <option value="short">Short</option>
             <option value="long">Long</option>
+            <option value="hide">Hide</option>
+          </SelectInput>
+        </div>
+        <div class="flex flex-col bg-gray-200 dark:bg-gray-800 rounded-lg p-2 m-1">
+          <SelectInput id="ampm_format" label="AM/PM Format" v-model="model.ampm_format" class="w-fit">
+            <option value="dot_pm">Dot for PM</option>
+            <option value="dot_am">Dot for AM</option>
+            <option value="am_pm">AM/PM</option>
+            <option value="a_p">A/P</option>
+            <option value="hide">Hide</option>
           </SelectInput>
         </div>
       </div>
@@ -68,10 +77,10 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
           <Checkbox id="use_12hr" label="Use 12 Hr Format" v-model="model.use_12hr" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="show_ampm" label="Show AM/PM" v-model="model.show_ampm" :value="true" />
+          <Checkbox id="show_ampm" label="Show AM/PM for Next Alarm" v-model="model.show_ampm" :value="true" />
         </div>
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
-          <Checkbox id="shorten_ampm" label="Shorten AM/PM to A/P" v-model="model.shorten_ampm" :value="true" />
+          <Checkbox id="shorten_ampm" label="Shorten AM/PM to A/P for Next Alarm" v-model="model.shorten_ampm" :value="true" />
         </div>
       </div>
     </BasicPanel>
@@ -153,6 +162,10 @@ const fontOptions = ref(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy
         <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
           <TextInput id="alarm_size" label="Alarm Font Size (px)" v-model="model.alarm_size" type="number" step="1"
             min="1" inputClass="w-24" />
+        </div>
+        <div class="flex flex-col bg-gray-200 dark:bg-gray-800 p-1 m-1 rounded-lg">
+          <TextInput id="ampm_dot_size" label="AM/PM Dot Size (px)" v-model="model.ampm_dot_size" type="number" step="1" min="1"
+            inputClass="w-24" />
         </div>
       </div>
     </BasicPanel>

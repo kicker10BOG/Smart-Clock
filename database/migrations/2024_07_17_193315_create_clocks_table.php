@@ -22,6 +22,8 @@ return new class extends Migration
             $table->boolean('show_next_alarm')->default(true);
             $table->boolean('show_seconds')->default(false);
             $table->boolean('use_12hr')->default(true);
+            $table->enum('ampm_format', ['am_pm', 'a_p', 'dot_pm', 'dot_am', 'hide'])->default('dot_pm');
+            $table->unsignedSmallInteger('ampm_dot_size')->default(80);
             $table->boolean('show_ampm')->default(true);
             $table->boolean('shorten_ampm')->default(true);
             $table->unsignedSmallInteger('width')->default(1024);
