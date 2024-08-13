@@ -336,7 +336,7 @@ onUnmounted(() => {
     <audio ref="audioElement" class="hidden" controls loop>
       <source src="/audio/alarm-clock-90867.mp3">
     </audio>
-    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()">
+    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()" class="text-black dark:text-white">
       <template #header>
         <div class="m-auto flex-grow">
           Alarm Triggered!
