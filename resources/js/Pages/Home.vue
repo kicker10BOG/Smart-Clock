@@ -22,6 +22,10 @@ const user = computed(() => page.props.auth.user)
         Snooze and dismiss also work across devices.
         So, pressing snooze or dismiss on one device will also cause it to take effect on 
           all other devices showing that clock. 
+        If you want to use the keyboard or programmed buttons to snooze or dismiss, the s 
+          key will snooze the alarm and d key will dismiss it. 
+        If you want a bright clock during the day and a darker one at night, you can setup 
+          color changes for the background and text colors. 
       </p>
       <p>
         The menu in the top right also has a few useful buttons.
