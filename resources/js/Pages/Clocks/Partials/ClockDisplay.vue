@@ -242,29 +242,31 @@ defineExpose({
   snoozeAlarm,
 })
 
+function listenForKey(e) {
+  if (e.code == 'KeyD') {
+    console.log('dismiss')
+    if (alarmTriggered.value || alarmSnoozed.value) {
+      dismissAlarm()
+    }
+  }
+  else if (e.code == 'KeyS') {
+    console.log('snooze')
+    if (alarmTriggered.value) {
+      snoozeAlarm()
+    }
+  }
+}
+
 onMounted(() => {
   oneSecondInterval = setInterval(updateTime, 1000)
   twoSecondInterval = setInterval(everyTwoSeconds, 2000)
-  document.addEventListener("keydown", (e) => {
-    if (e.code == 'KeyD') {
-      console.log('dismiss')
-      if (alarmTriggered.value || alarmSnoozed.value) {
-        dismissAlarm()
-      }
-    }
-    else if (e.code == 'KeyS') {
-      console.log('snooze')
-      if (alarmTriggered.value) {
-        snoozeAlarm()
-      }
-    }
-  })
+  document.addEventListener("keydown", listenForKey)
 })
 
 onUnmounted(() => {
   clearInterval(oneSecondInterval)
   clearInterval(twoSecondInterval)
-  document.removeEventListener('keydown')
+  document.removeEventListener('keydown', listenForKey)
 })
 </script>
 
@@ -336,7 +338,8 @@ onUnmounted(() => {
     <audio ref="audioElement" class="hidden" controls loop>
       <source src="/audio/alarm-clock-90867.mp3">
     </audio>
-    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()" class="text-black dark:text-white">
+    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()"
+      class="text-black dark:text-white">
       <template #header>
         <div class="m-auto flex-grow">
           Alarm Triggered!
