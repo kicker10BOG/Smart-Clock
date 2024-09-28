@@ -243,13 +243,13 @@ defineExpose({
 })
 
 function listenForKey(e) {
-  if (e.code == 'KeyD') {
+  if (e.code == 'KeyD' || e.key == 'D' || e.key == 'd') {
     console.log('dismiss')
     if (alarmTriggered.value || alarmSnoozed.value) {
       dismissAlarm()
     }
   }
-  else if (e.code == 'KeyS') {
+  else if (e.code == 'KeyS' || e.key == 'S' || e.key == 's') {
     console.log('snooze')
     if (alarmTriggered.value) {
       snoozeAlarm()
