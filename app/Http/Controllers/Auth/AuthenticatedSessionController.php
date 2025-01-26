@@ -33,6 +33,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        flash("Login succesful")->success();
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -46,6 +48,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        flash("Logout succesful")->success();
 
         return redirect('/');
     }
