@@ -50,6 +50,9 @@ cp .env.example .env
 ``` 
 Inside your `.env` file, I suggest changing the settings for `DB_USERNAME` and `DB_PASSWORD` to something different. 
 
+You also neeed to change `PUSHER_HOST` to the IP address of the server running this, unless you only plan to 
+access it on the same device that is running it. 
+
 You should also change `PUSHER_APP_ID` to a random number like 75168, `PUSHER_APP_KEY` to a random string like 'gdkfdjlhdjkeew', and `PUSHER_APP_SECRET` to another random string like 'qopikgjpvbmsdnjajlipgjkm'. 
 
 If you plan to access Smart Clock from a different computer besides the one it is hosted on, set `PUSHER_HOST` to the host's LAN IP or domain name. 
@@ -75,13 +78,13 @@ Next, generate the encryption key.
 ```
 sail artisan key:generate
 ```
-Then, we build the database. 
-```
-sail artisan migrate
-```
 Now install NPM packages
 ```
 sail npm i
+```
+Then, we build the database. 
+```
+sail artisan migrate
 ```
 After that, build the vue pages and components
 ```
