@@ -99,3 +99,16 @@ I just haven't looked into it yet.
 If you are just using it on your local network, going without ssl is probably fine. 
 Just keep your network secure so potential bad actors can't get in and steal whatever password you use. 
 And don't use the same password elsewhere. 
+
+## Note on Raspberry Pi
+
+I tried running this on a Pi 3b+ with mixed results.
+My first attempt was with 32-bit Raspberry Pi OS Bullseye. 
+I couldn't get it working. 
+So, I reflashed the SD card with 64-bit Raspberry Pi OS Bookworm. 
+I still couldn't get it to work. 
+Maybe if I kept trying, I could have made it work, but it wasn't worth it. 
+Finally, I reflashed the SD card with 64-bit Ubuntu Server 24.04 LTS (Noble). 
+This works, but the setup process is slow and might crash a few times before it works. 
+The big time consumers are `composer install`, `npm i`, and `npm run build`. 
+`sail up -d` can also take some time, but not as much as the others listed. 
