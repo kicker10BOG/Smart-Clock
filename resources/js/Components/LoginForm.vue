@@ -3,7 +3,7 @@ import BasicButton from '@/Components/BasicButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 
 defineProps({
   canResetPassword: {
@@ -49,7 +49,7 @@ const submit = () => {
 
     <div class="block mt-4">
       <div class="flex items-center">
-        <Checkbox v-model:checked="form.remember" id="remember" label="Remember Me" position="right" />
+        <Checkbox v-model="form.remember" id="remember" label="Remember Me" position="right" />
       </div>
     </div>
 

@@ -16,7 +16,7 @@ const nextAlarm = ref(null)
 const dateElement = ref(null)
 const timeElement = ref(null)
 const alarmElement = ref(null)
-const audioElement = ref(null)
+// const audioElement = ref(null)
 const clockCenterX = computed(() => model.value.width / 2)
 const clockCentery = computed(() => model.value.height / 2)
 
@@ -84,16 +84,16 @@ function updateTime() {
       if (currTime.value.getHours() == d.getHours() && currTime.value.getMinutes() == d.getMinutes()) {
         triggeredAlarm.value = { ...snoozedAlarm.value.alarm }
         alarmTriggered.value = true
-        audioElement.value.load()
-        audioElement.value.play()
+        // audioElement.value.load()
+        // audioElement.value.play()
       }
     }
     if (nextAlarm.value) {
       if (currTime.value.getDay() == nextAlarm.value.day && currTime.value.getHours() == nextAlarm.value.alarm.hour && currTime.value.getMinutes() == nextAlarm.value.alarm.minute) {
         triggeredAlarm.value = nextAlarm.value.alarm
         alarmTriggered.value = true
-        audioElement.value.load()
-        audioElement.value.play()
+        // audioElement.value.load()
+        // audioElement.value.play()
       }
     }
   }
@@ -242,29 +242,31 @@ defineExpose({
   snoozeAlarm,
 })
 
+function listenForKey(e) {
+  if (e.code == 'KeyD' || e.key == 'D' || e.key == 'd') {
+    console.log('dismiss')
+    if (alarmTriggered.value || alarmSnoozed.value) {
+      dismissAlarm()
+    }
+  }
+  else if (e.code == 'KeyS' || e.key == 'S' || e.key == 's') {
+    console.log('snooze')
+    if (alarmTriggered.value) {
+      snoozeAlarm()
+    }
+  }
+}
+
 onMounted(() => {
   oneSecondInterval = setInterval(updateTime, 1000)
   twoSecondInterval = setInterval(everyTwoSeconds, 2000)
-  document.addEventListener("keydown", (e) => {
-    if (e.code == 'KeyD') {
-      console.log('dismiss')
-      if (alarmTriggered.value || alarmSnoozed.value) {
-        dismissAlarm()
-      }
-    }
-    else if (e.code == 'KeyS') {
-      console.log('snooze')
-      if (alarmTriggered.value) {
-        snoozeAlarm()
-      }
-    }
-  })
+  document.addEventListener("keydown", listenForKey)
 })
 
 onUnmounted(() => {
   clearInterval(oneSecondInterval)
   clearInterval(twoSecondInterval)
-  document.removeEventListener('keydown')
+  document.removeEventListener('keydown', listenForKey)
 })
 </script>
 
@@ -333,10 +335,12 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <audio ref="audioElement" class="hidden" controls loop>
+    <!-- <audio ref="audioElement" class="hidden" controls loop>
       <source src="/audio/alarm-clock-90867.mp3">
-    </audio>
-    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()">
+    </audio> -->
+    <!-- <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false" @close="audioElement.pause()" -->
+    <BasicModal v-model="alarmTriggered" :showCloseX="false" :closeOnClickAway="false"
+      class="text-black dark:text-white">
       <template #header>
         <div class="m-auto flex-grow">
           Alarm Triggered!
@@ -350,6 +354,9 @@ onUnmounted(() => {
           <BasicButton @click="snoozeAlarm" type="warning" size="xl">Snooze</BasicButton>
           <BasicButton @click="dismissAlarm" type="danger" size="xl">Dismiss</BasicButton>
         </div>
+        <audio class="hidden" controls loop autoplay>
+          <source src="/audio/alarm-clock-90867.mp3">
+        </audio>
       </div>
     </BasicModal>
   </div>

@@ -29,6 +29,10 @@ const div = ref(null)
 const input = ref(null)
 
 onMounted(() => {
+  if (div.value.hasAttribute('autocomplete')) {
+    input.value.setAttribute('autocomplete', div.value.removeAttribute('autocomplete'))
+    div.value.removeAttribute('autocomplete')
+  }
   if (div.value.hasAttribute('autofocus')) {
     div.value.removeAttribute('autofocus')
     input.value.setAttribute('autofocus', '')
